@@ -1,2 +1,6 @@
 # DPI
-Deep Packet Inspection (DPI) is designed to inspect the actual content within network packets, including the payload of encrypted traffic. It analyzes the content of individual encrypted packets to identify specific applications, protocols, or threats.
+The proliferation of encrypted network traffic in today's digital ecosystem has provided a considerable hurdle. It poses difficulties for tasks such as network analysis, security monitoring, and data examination. As encryption technologies continue to evolve and become more popular, old methods of network analysis that rely on viewing unencrypted data have lost much of their usefulness. This lowers their ability to offer crucial insights about network behavior and potential security risks.
+
+In light of this developing situation, the research project "Deep Packet Inspection for Encrypted Network Traffic Analysis" tries to tackle this essential issue. Its purpose is to produce a prototype that enables for the analysis and interpretation of encrypted network traffic without compromising data privacy.
+
+The increased ubiquity of encrypted network traffic has made it increasingly difficult for standard network analysis tools to obtain insight into the content and features of encrypted communication. This lack of effective methods for evaluating encrypted network traffic causes issues for network administrators and security analysts, hindering their ability to make educated decisions and take proactive measures to ensure both network efficiency and security.
