@@ -8,7 +8,7 @@ if errorlevel 1 (
   exit /b 1
 )
 echo Running the live check. Run this window as Administrator after Npcap is installed.
-dpi live --count 80 --out live-output
+python DPI.py live --count 80 --out live-output
 if errorlevel 1 (
   echo Live capture failed. Install Npcap from https://npcap.com and run as Administrator.
   pause

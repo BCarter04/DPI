@@ -18,6 +18,7 @@ import sys
 
 from dpi.analyze import analyze
 from dpi.capture import build_demo_packets, capture_live, choose_live_interface, load_pcap
+from dpi.devices import devices_on_link
 from dpi.report import write_html
 
 
@@ -44,6 +45,7 @@ def print_summary(summary):
     print("-----------")
     print(f"Source: {summary['source']}")
     print(f"Packets: {metrics['packet_count']}")
+    print(f"Local devices active: {len(summary.get('devices') or [])}")
     print(f"Time span: {metrics['duration_seconds']} seconds")
     print(f"Payload bytes: {metrics['total_payload_bytes']}")
     print("\nWhat stands out")
@@ -56,38 +58,56 @@ def print_summary(summary):
     for flow in summary["flows"][:12]:
         seen = flow.get("server_name") or flow.get("dns_name")
         extra = f"  name={seen}" if seen else ""
+        if flow.get("app"):
+            extra += f"  app={flow['app']}"
         print(f"  {flow['who']}  {flow['category']}  packets={flow['packets']} bytes={flow['bytes']}{extra}")
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Read network traffic in plain language. Does not decrypt anything.")
-    parser.add_argument("command", nargs="?", choices=["demo", "live", "pcap"], help="demo, live, or pcap")
+    parser.add_argument("command", nargs="?", choices=["demo", "live", "pcap", "window"], help="demo, live, pcap, or window")
     parser.add_argument("pcap_path", nargs="?", help="Capture file, used with: dpi pcap file.pcap")
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
     parser.add_argument("--count", type=int, default=80, help="Live packet count. Default: 80.")
-    parser.add_argument("--out", default="dpi-output", help="Report folder.")
+    parser.add_argument("--out", default=None, help="Report folder. Live writes to live-output. Demo writes to dpi-output.")
     # Keep the old flags working.
     parser.add_argument("--demo", action="store_true")
     parser.add_argument("--live", action="store_true")
     parser.add_argument("--pcap", help="Capture file.")
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
 
+    if args.command == "window":
+        from dpi.gui import launch
+        launch()
+        return None
     if args.command == "pcap" or args.pcap:
         path = args.pcap_path or args.pcap
         if not path:
             parser.error("Give a capture file, for example: dpi pcap capture.pcap")
         packets = load_pcap(path)
         source = f"pcap file {path}"
+        summary = analyze(packets, source)
     elif args.command == "live" or args.live or args.iface:
         iface = args.iface or choose_live_interface()
         packets = capture_live(iface, args.count)
-        source = f"live capture on {iface}"
+        source = f"live capture on {iface}, the network this computer is using"
+        if not packets:
+            raise SystemExit(f"No packets were read on {iface}. Run this window as Administrator, install Npcap, and pick the Wi-Fi or Ethernet name.")
+        summary = analyze(packets, source)
+        linked = devices_on_link(iface)
+        if linked:
+            summary["devices"] = [{"address": address, "how": "answered on the local network"} for address in linked]
+            summary["highlights"].insert(0, f"{len(linked)} device(s) answered on the local network: {', '.join(linked)}.")
+        out_dir = args.out or "live-output"
     else:
         packets = build_demo_packets()
         source = "built-in demo (fake packets, not your network)"
-    summary = analyze(packets, source)
+        summary = analyze(packets, source)
+        out_dir = args.out or "dpi-output"
+    if args.command == "pcap" or args.pcap:
+        out_dir = args.out or "dpi-output"
     print_summary(summary)
-    html_path = write_outputs(summary, args.out)
+    html_path = write_outputs(summary, out_dir)
     print(f"\nWrote {html_path}")
     return summary
 

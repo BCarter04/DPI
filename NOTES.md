@@ -31,5 +31,5 @@ These are not built yet. They are the next useful steps, still without decryptio
 | `dpi/cli.py` | Chooses demo, live, or pcap, then prints and saves the report | Can grow a window that calls the same functions |
 | `dpi/capture.py` | Demo packets, live sniff, pcap read, pick the connected interface | Can keep listening instead of stopping after a set count |
 | `dpi/analyze.py` | Port guess, conversations, names, fingerprint, highlights | Can compare size and timing patterns across runs |
-| `dpi/report.py` | One HTML page | Can add charts without adding a new dependency |
+| `dpi/devices.py` | Counts local devices seen in the capture, and on a live run asks the local subnet who is awake | Can later add a device name. It will not scan the public internet |
 | `run_live.bat` | Installs the package and runs the live check on Windows | Can become the thing the `.exe` launches |

@@ -15,6 +15,9 @@ What it will do
 
 from collections import defaultdict
 
+from dpi.apps import guess_app
+from dpi.devices import devices_in_packets
+
 PORT_GUIDE = [
     ({80, 8080, 8000}, "Web, not encrypted", "Port 80 is the old web port. The page text can be visible."),
     ({443, 8443}, "Encrypted web (HTTPS)", "Port 443 is the usual HTTPS port. The page itself stays encrypted."),
@@ -112,6 +115,7 @@ def analyze(packets, source):
     talkers = defaultdict(int)
     flows = {}
     names = set()
+    apps = set()
     payload_bytes = 0
     sizes = []
     times = []
@@ -152,6 +156,7 @@ def analyze(packets, source):
             "server_name": None,
             "fingerprint": None,
             "dns_name": None,
+            "app": None,
         })
         flow["packets"] += 1
         flow["bytes"] += len(payload)
@@ -164,6 +169,12 @@ def analyze(packets, source):
             flow["fingerprint"] = fingerprint
         if dns_name:
             flow["dns_name"] = dns_name
+        seen = flow.get("server_name") or flow.get("dns_name")
+        app = guess_app(seen)
+        if app:
+            flow["app"] = app
+            apps.add(app)
+            flow["why"] = f"The visible name matches {app}. The page or video is still hidden."
 
     duration = (max(times) - min(times)) if len(times) >= 2 else 0.0
     window = duration if duration > 0 else None
@@ -171,6 +182,15 @@ def analyze(packets, source):
     top_talkers = sorted(talkers.items(), key=lambda item: -item[1])[:5]
     other = categories.get("Other", 0)
     highlights = []
+    if apps:
+        highlights.append("Apps recognised from visible names: " + ", ".join(sorted(apps)) + ".")
+    else:
+        highlights.append("No YouTube, Netflix, Google, or other listed app name was visible.")
+    local_devices = devices_in_packets(packets)
+    if local_devices:
+        highlights.append(f"{len(local_devices)} local device(s) were active in this capture: {', '.join(local_devices)}.")
+    else:
+        highlights.append("No local device address was seen in this capture.")
     if names:
         highlights.append("Visible names: " + ", ".join(sorted(names)) + ".")
     else:
@@ -181,11 +201,22 @@ def analyze(packets, source):
         busiest = flow_list[0]
         highlights.append(f"Busiest conversation: {busiest['who']} ({busiest['bytes']} bytes).")
     if sizes:
-        highlights.append(f"Payload sizes ran from {min(sizes)} to {max(sizes)} bytes. Size and timing are still visible when the page is not.")
+        small = sum(1 for size in sizes if size < 100)
+        large = sum(1 for size in sizes if size >= 500)
+        highlights.append(
+            f"Payload sizes ran from {min(sizes)} to {max(sizes)} bytes. "
+            f"{small} were under 100 bytes and {large} were 500 bytes or more."
+        )
+    if len(times) >= 4:
+        gaps = [times[i] - times[i - 1] for i in range(1, len(times))]
+        short = sum(1 for gap in gaps if gap < 0.05)
+        if short >= max(3, len(gaps) // 2):
+            highlights.append("Many packets arrived close together. That often means a busy download or a burst of traffic, not a slow lookup.")
     notes = [
         "Nothing was decrypted. Encrypted page contents stay encrypted.",
         "A port label is a hint. Many apps share port 443.",
-        "Speed uses the real time from the first packet to the last.",
+        "An app name is a match on the visible site name, not proof of which video or search was used.",
+        "A device count is who talked, or who answered on the local network. A silent device is not listed.",
     ]
     return {
         "source": source,
@@ -193,6 +224,8 @@ def analyze(packets, source):
         "categories": dict(categories),
         "flows": flow_list,
         "names": sorted(names),
+        "apps": sorted(apps),
+        "devices": [{"address": address, "how": "seen in this capture"} for address in local_devices],
         "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
         "highlights": highlights,
         "metrics": {

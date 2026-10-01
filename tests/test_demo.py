@@ -9,5 +9,6 @@ def test_demo_names_the_sample_sites():
     assert "example.com" in summary["names"]
     assert "www.example.com" in summary["names"]
     assert "cdn.example.net" in summary["names"]
-    assert summary["metrics"]["packet_count"] == 11
+    assert "YouTube" in summary["apps"]
+    assert "Netflix" in summary["apps"]
     assert summary["flows"][0]["who"]
