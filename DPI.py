@@ -1,5 +1,7 @@
 """Old start file.
 
+Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
+
 What it does now
     Starts the same program as the dpi command. Kept so python DPI.py still works.
 

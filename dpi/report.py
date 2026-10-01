@@ -1,5 +1,7 @@
 """Write the one-page report.
 
+Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
+
 What it does now
     Turns the analysis into report.html: counts, what stands out, busiest
     addresses, and conversations. No extra library is required.
@@ -74,7 +76,7 @@ th, td {{ text-align:left; padding:8px 6px; border-bottom:1px solid #e4e9ef; }}
 </div>
 <h2>What stands out</h2><div class="panel"><ul>{highlights}</ul></div>
 <h2>Traffic mix</h2><div class="panel">{_bars(sorted(summary['categories'].items(), key=lambda item: -item[1]))}</div>
-<p>Source: {escape(summary['source'])}.</p>
+<p>Source: {escape(summary['source'])}. Owner: Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.</p>
 <h2>Busiest addresses</h2><div class="panel"><ul>{talker_rows}</ul></div>
 <h2>Conversations</h2>
 <div class="panel"><table><thead><tr><th>Who talked</th><th>Best guess</th><th>Name seen</th><th>Packets</th><th>Bytes</th></tr></thead>

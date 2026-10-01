@@ -1,5 +1,7 @@
 """Front door for the program.
 
+Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
+
 What it does now
     Reads the command, gets packets, prints a short reading, and writes
     report.html, summary.json, and conversations.csv.

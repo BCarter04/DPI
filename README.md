@@ -39,4 +39,8 @@ Live capture on Windows needs Npcap and an Administrator terminal. On Linux it m
 - It keeps a short handshake fingerprint so two encrypted flows can be compared without opening them.
 - The HTML report says what stands out, in one list, instead of only printing counts.
 
-The old MIT license is unchanged.
+## Owner
+
+Oluwatobiloba Benjamin Ogungbangbe is the owner. All rights reserved.
+
+Use and changes are allowed for a noncommercial purpose under the PolyForm Noncommercial License 1.0.0. Selling is not allowed without written permission. Copies must keep the Required Notice and the license. Ideas do not transfer ownership. See [LICENSE](LICENSE), [NOTICE](NOTICE), and [CONTRIBUTING.md](CONTRIBUTING.md).

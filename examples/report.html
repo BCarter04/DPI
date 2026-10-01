@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DPI report</title>
+<style>
+body { margin:0; font-family: Georgia, serif; color:#1c2430; background:#f6f8fb; }
+main { max-width:880px; margin:0 auto; padding:32px 20px 64px; }
+.lede { color:#5c6b7a; }
+.cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }
+.card, .panel { background:#fff; border:1px solid #e4e9ef; border-radius:12px; padding:14px 16px; }
+.card b { display:block; font-size:1.4rem; font-family:sans-serif; }
+.row { display:grid; grid-template-columns:190px 1fr 48px; gap:10px; align-items:center; margin:8px 0; font-family:sans-serif; font-size:.92rem; }
+.track { background:#eef2f6; border-radius:999px; height:10px; }
+.fill { background:#1f6feb; height:10px; border-radius:999px; }
+table { width:100%; border-collapse:collapse; font-family:sans-serif; font-size:.92rem; }
+th, td { text-align:left; padding:8px 6px; border-bottom:1px solid #e4e9ef; }
+</style></head><body><main>
+<h1>DPI look at this traffic</h1>
+<p class="lede">Nothing was decrypted. This page uses only what a network can already see: addresses, ports, sizes, timing, lookup names, and a server name if the handshake still shows it.</p>
+<div class="cards">
+<div class="card"><b>11</b>packets</div>
+<div class="card"><b>0.84s</b>time span</div>
+<div class="card"><b>13.1</b>packets per second</div>
+<div class="card"><b>477</b>payload bytes</div>
+</div>
+<h2>What stands out</h2><div class="panel"><ul><li>Visible names: cdn.example.net, example.com, www.example.com.</li><li>1 packets used a port this tool does not recognise. A port is only a hint.</li><li>Busiest conversation: 10.0.0.8:51001 ↔ 93.184.216.34:443 (204 bytes).</li><li>Payload sizes ran from 14 to 83 bytes. Size and timing are still visible when the page is not.</li></ul></div>
+<h2>Traffic mix</h2><div class="panel"><div class='row'><div class='label'>Encrypted web (HTTPS)</div><div class='track'><div class='fill' style='width:100%'></div></div><div class='count'>4</div></div>
+<div class='row'><div class='label'>Name lookup (DNS)</div><div class='track'><div class='fill' style='width:50%'></div></div><div class='count'>2</div></div>
+<div class='row'><div class='label'>Web, not encrypted</div><div class='track'><div class='fill' style='width:50%'></div></div><div class='count'>2</div></div>
+<div class='row'><div class='label'>Remote login (SSH)</div><div class='track'><div class='fill' style='width:25%'></div></div><div class='count'>1</div></div>
+<div class='row'><div class='label'>Clock sync (NTP)</div><div class='track'><div class='fill' style='width:25%'></div></div><div class='count'>1</div></div>
+<div class='row'><div class='label'>Other</div><div class='track'><div class='fill' style='width:25%'></div></div><div class='count'>1</div></div></div>
+<p>Source: built-in demo (fake packets, not your network). Owner: Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.</p>
+<h2>Busiest addresses</h2><div class="panel"><ul><li>10.0.0.8: 477 bytes</li><li>93.184.216.34: 270 bytes</li><li>203.0.113.50: 78 bytes</li><li>10.0.0.1: 48 bytes</li><li>1.1.1.1: 43 bytes</li></ul></div>
+<h2>Conversations</h2>
+<div class="panel"><table><thead><tr><th>Who talked</th><th>Best guess</th><th>Name seen</th><th>Packets</th><th>Bytes</th></tr></thead>
+<tbody><tr><td>10.0.0.8:51001 ↔ 93.184.216.34:443</td><td>Encrypted web (HTTPS)</td><td>www.example.com</td><td>3</td><td>204</td></tr><tr><td>10.0.0.8:51003 ↔ 203.0.113.50:443</td><td>Encrypted web (HTTPS)</td><td>cdn.example.net</td><td>1</td><td>78</td></tr><tr><td>10.0.0.8:51000 ↔ 93.184.216.34:80</td><td>Web, not encrypted</td><td>—</td><td>2</td><td>66</td></tr><tr><td>10.0.0.8:48000 ↔ 10.0.0.1:123</td><td>Clock sync (NTP)</td><td>—</td><td>1</td><td>48</td></tr><tr><td>10.0.0.8:53000 ↔ 1.1.1.1:53</td><td>Name lookup (DNS)</td><td>example.com</td><td>2</td><td>43</td></tr><tr><td>10.0.0.8:51004 ↔ 198.51.100.20:4444</td><td>Other</td><td>—</td><td>1</td><td>24</td></tr><tr><td>10.0.0.8:51002 ↔ 203.0.113.10:22</td><td>Remote login (SSH)</td><td>—</td><td>1</td><td>14</td></tr></tbody></table></div>
+<h2>How to read this</h2><ul><li>Nothing was decrypted. Encrypted page contents stay encrypted.</li><li>A port label is a hint. Many apps share port 443.</li><li>Speed uses the real time from the first packet to the last.</li></ul>
+</main></body></html>

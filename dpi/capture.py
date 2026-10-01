@@ -1,5 +1,7 @@
 """Where the packets come from.
 
+Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
+
 What it does now
     build_demo_packets() makes fake packets so the tool runs with no network.
     load_pcap() reads a saved capture.

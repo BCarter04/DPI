@@ -1,5 +1,7 @@
 """Turn packets into plain-language facts.
 
+Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
+
 What it does now
     Guesses a category from the port, groups both directions into one
     conversation, reads a DNS name or TLS server name when it is visible,
