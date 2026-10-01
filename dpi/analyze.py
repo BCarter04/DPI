@@ -1,0 +1,205 @@
+"""Turn packets into plain-language facts.
+
+What it does now
+    Guesses a category from the port, groups both directions into one
+    conversation, reads a DNS name or TLS server name when it is visible,
+    and builds a short handshake fingerprint. The fingerprint is the shape
+    of the handshake, not the page.
+
+What it will do
+    Later it can compare size and timing across runs. It will not grow into
+    a decryptor. Encrypted contents stay encrypted.
+"""
+
+from collections import defaultdict
+
+PORT_GUIDE = [
+    ({80, 8080, 8000}, "Web, not encrypted", "Port 80 is the old web port. The page text can be visible."),
+    ({443, 8443}, "Encrypted web (HTTPS)", "Port 443 is the usual HTTPS port. The page itself stays encrypted."),
+    ({22}, "Remote login (SSH)", "Port 22 is usually a secure shell login."),
+    ({53}, "Name lookup (DNS)", "Port 53 turns a name like example.com into an address."),
+    ({25, 465, 587}, "Email", "These ports are used to send mail."),
+    ({20, 21}, "File transfer (FTP)", "Ports 20 and 21 are the old file-transfer ports."),
+    ({67, 68}, "Address setup (DHCP)", "These ports hand a computer its local address."),
+    ({123}, "Clock sync (NTP)", "Port 123 is used to check the time."),
+    ({137, 138, 139, 445}, "File sharing", "These ports are used by Windows-style file sharing."),
+    ({5060, 5061}, "Calls (VoIP)", "These ports are used by some internet phone calls."),
+    ({1194}, "VPN", "Port 1194 is the usual OpenVPN port."),
+    ({1935}, "Video stream", "Port 1935 is an older video-streaming port."),
+]
+PROTO_NAMES = {1: "ICMP", 6: "TCP", 17: "UDP"}
+
+
+def explain_port(port, transport):
+    for ports, name, sentence in PORT_GUIDE:
+        if port in ports:
+            return name, sentence
+    return "Other", f"{transport} port {port} is not in the short well-known list."
+
+
+def read_server_name(payload):
+    data = bytes(payload)
+    if len(data) < 11 or data[0] != 0x16 or data[5] != 0x01:
+        return None, None
+    try:
+        index = 43
+        session_len = data[index]
+        index += 1 + session_len
+        cipher_len = int.from_bytes(data[index:index + 2], "big")
+        ciphers = data[index + 2:index + 2 + cipher_len]
+        index += 2 + cipher_len
+        comp_len = data[index]
+        index += 1 + comp_len
+        if index + 2 > len(data):
+            return None, None
+        ext_len = int.from_bytes(data[index:index + 2], "big")
+        index += 2
+        end = min(len(data), index + ext_len)
+        types = []
+        name = None
+        while index + 4 <= end:
+            ext_type = int.from_bytes(data[index:index + 2], "big")
+            ext_size = int.from_bytes(data[index + 2:index + 4], "big")
+            ext_data = data[index + 4:index + 4 + ext_size]
+            types.append(ext_type)
+            if ext_type == 0 and len(ext_data) >= 5 and name is None:
+                name_len = int.from_bytes(ext_data[3:5], "big")
+                name = ext_data[5:5 + name_len].decode("utf-8", "replace")
+            index += 4 + ext_size
+        cipher_text = "-".join(f"{int.from_bytes(ciphers[i:i+2], 'big'):04x}" for i in range(0, len(ciphers) - 1, 2))
+        fingerprint = f"ciphers:{cipher_text};ext:{','.join(str(item) for item in types)}"
+        return name, fingerprint
+    except (IndexError, ValueError):
+        return None, None
+
+
+def read_dns_name(packet):
+    try:
+        from scapy.all import DNS
+        if DNS in packet and packet[DNS].qd is not None:
+            name = packet[DNS].qd.qname
+            if isinstance(name, bytes):
+                name = name.decode("utf-8", "replace")
+            return str(name).rstrip(".")
+    except Exception:
+        return None
+    return None
+
+
+def _endpoints(packet):
+    from scapy.all import IP, IPv6, TCP, UDP
+    if IP in packet:
+        src, dst = packet[IP].src, packet[IP].dst
+    elif IPv6 in packet:
+        src, dst = packet[IPv6].src, packet[IPv6].dst
+    else:
+        return None
+    if TCP in packet:
+        return src, dst, int(packet[TCP].sport), int(packet[TCP].dport), "TCP", bytes(packet[TCP].payload)
+    if UDP in packet:
+        return src, dst, int(packet[UDP].sport), int(packet[UDP].dport), "UDP", bytes(packet[UDP].payload)
+    proto = PROTO_NAMES.get(packet[IP].proto, "Other") if IP in packet else "Other"
+    return src, dst, 0, 0, proto, b""
+
+
+def analyze(packets, source):
+    from datetime import datetime
+
+    categories = defaultdict(int)
+    protocols = defaultdict(int)
+    talkers = defaultdict(int)
+    flows = {}
+    names = set()
+    payload_bytes = 0
+    sizes = []
+    times = []
+
+    for packet in packets:
+        stamp = float(getattr(packet, "time", 0) or 0)
+        if stamp:
+            times.append(stamp)
+        ends = _endpoints(packet)
+        if ends is None:
+            categories["Not IP"] += 1
+            continue
+        src, dst, sport, dport, transport, payload = ends
+        payload_bytes += len(payload)
+        sizes.append(len(payload))
+        protocols[transport] += 1
+        talkers[src] += len(payload)
+        talkers[dst] += len(payload)
+        left, right = explain_port(sport, transport), explain_port(dport, transport)
+        if right[0] != "Other":
+            category, sentence = right
+        elif left[0] != "Other":
+            category, sentence = left
+        else:
+            category, sentence = right
+        categories[category] += 1
+        server_name, fingerprint = read_server_name(payload)
+        dns_name = read_dns_name(packet)
+        if dns_name:
+            names.add(dns_name)
+        key = tuple(sorted([(src, sport), (dst, dport)])) + (transport,)
+        flow = flows.setdefault(key, {
+            "who": f"{src}:{sport} ↔ {dst}:{dport}",
+            "category": category,
+            "why": sentence,
+            "packets": 0,
+            "bytes": 0,
+            "server_name": None,
+            "fingerprint": None,
+            "dns_name": None,
+        })
+        flow["packets"] += 1
+        flow["bytes"] += len(payload)
+        if server_name:
+            flow["server_name"] = server_name
+            flow["category"] = "Encrypted web (HTTPS)"
+            flow["why"] = f"The handshake named {server_name}. The page contents are still hidden."
+            names.add(server_name)
+        if fingerprint:
+            flow["fingerprint"] = fingerprint
+        if dns_name:
+            flow["dns_name"] = dns_name
+
+    duration = (max(times) - min(times)) if len(times) >= 2 else 0.0
+    window = duration if duration > 0 else None
+    flow_list = sorted(flows.values(), key=lambda item: -item["bytes"])
+    top_talkers = sorted(talkers.items(), key=lambda item: -item[1])[:5]
+    other = categories.get("Other", 0)
+    highlights = []
+    if names:
+        highlights.append("Visible names: " + ", ".join(sorted(names)) + ".")
+    else:
+        highlights.append("No site or lookup name was visible. That is normal if the handshake was missed.")
+    if other:
+        highlights.append(f"{other} packets used a port this tool does not recognise. A port is only a hint.")
+    if flow_list:
+        busiest = flow_list[0]
+        highlights.append(f"Busiest conversation: {busiest['who']} ({busiest['bytes']} bytes).")
+    if sizes:
+        highlights.append(f"Payload sizes ran from {min(sizes)} to {max(sizes)} bytes. Size and timing are still visible when the page is not.")
+    notes = [
+        "Nothing was decrypted. Encrypted page contents stay encrypted.",
+        "A port label is a hint. Many apps share port 443.",
+        "Speed uses the real time from the first packet to the last.",
+    ]
+    return {
+        "source": source,
+        "generated_at": datetime.now().isoformat(timespec="seconds"),
+        "categories": dict(categories),
+        "flows": flow_list,
+        "names": sorted(names),
+        "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
+        "highlights": highlights,
+        "metrics": {
+            "packet_count": len(packets),
+            "duration_seconds": round(duration, 3),
+            "total_payload_bytes": payload_bytes,
+            "packets_per_second": round(len(packets) / window, 2) if window else None,
+            "bytes_per_second": round(payload_bytes / window, 2) if window else None,
+            "protocol_names": dict(protocols),
+        },
+        "notes": notes,
+    }
