@@ -1,4 +1,16 @@
-# How to run DPI if you do not write code
+## Check this computer, then install
+
+In the DPI folder:
+
+```bat
+python DPI.py check
+python DPI.py setup
+```
+
+Check says if Python, Scapy, Npcap, and a network card are ready. Setup installs the Python pieces. It cannot install Npcap. Download that from https://npcap.com if the check says it is missing.
+
+To make a double-click program on Windows, double-click `build_exe.bat`. The result is `dist\DPI.exe`. Live capture from that program still needs Npcap and Run as administrator.
+
 
 You do not need to understand the Python files to use this.
 

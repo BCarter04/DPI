@@ -76,7 +76,7 @@ def print_summary(summary):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Read network traffic in plain language. Does not decrypt anything.")
-    parser.add_argument("command", nargs="?", choices=["demo", "live", "watch", "pcap", "window"], help="demo, live, watch, pcap, or window")
+    parser.add_argument("command", nargs="?", choices=["demo", "live", "watch", "pcap", "window", "check", "setup"], help="demo, live, watch, pcap, window, check, or setup")
     parser.add_argument("--seconds", type=int, default=15, help="Seconds for each watch round. Default: 15.")
     parser.add_argument("pcap_path", nargs="?", help="Capture file, used with: dpi pcap file.pcap")
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
@@ -88,6 +88,21 @@ def main(argv=None):
     parser.add_argument("--pcap", help="Capture file.")
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
 
+    if args.command == "check":
+        from dpi.doctor import check_computer, exe_ready
+        for line in check_computer():
+            print(line)
+        print(exe_ready())
+        return None
+    if args.command == "setup":
+        from dpi.doctor import check_computer, install_python_pieces
+        print(install_python_pieces())
+        for line in check_computer():
+            print(line)
+        print("Next: python DPI.py demo")
+        print("Live, as Administrator: python DPI.py live --count 80")
+        print("To make DPI.exe on Windows: double-click build_exe.bat")
+        return None
     if args.command == "window":
         from dpi.gui import launch
         launch()
