@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.4.0
+
+- A reading score out of 100, from repeats, resets, and failed lookups.
+- `--app YouTube` keeps only talks that matched that app. Demo and live both support it.
+- Ports 5353 and 1900 are labelled "Phones, printers, and TVs". Those devices use them to announce themselves on the home network.
+
 ## 2.3.0
 
 - Apps seen now lists the name, the confidence, and the site that matched.

@@ -43,7 +43,7 @@ PORT_GUIDE = [
     ({27015, 27036}, "Game (Steam)", "These ports are used by Steam game traffic."),
     ({554, 1935}, "Video stream", "These ports are older video-stream ports."),
     ({853}, "Private name lookup", "Port 853 is DNS over TLS. The lookup stays hidden."),
-    ({5353, 1900}, "Home discovery", "These ports let devices find each other on the local network."),
+    ({5353, 1900}, "Phones, printers, and TVs", "Ports 5353 and 1900 are how phones, printers, and TVs announce themselves on the home network. This is not a website."),
     ({5222, 5223}, "Chat", "These ports are used by some chat apps."),
     ({88, 389, 636}, "Work login", "These ports are used by office login systems."),
 ]
@@ -287,7 +287,17 @@ def analyze(packets, source):
     dns_bad = len(dns_problems)
     dns_health = "Good" if dns_ok and not dns_bad else "Check" if dns_bad else "Not seen"
     gateway = next((item for item in local_devices if item.endswith(".1")), "not seen")
-    highlights.append(f"DNS health: {dns_health}. Timed replies: {dns_ok}. Failed replies: {dns_bad}.")
+    score = 100
+    if repeats:
+        score -= 25
+    if resets:
+        score -= 15
+    if dns_bad:
+        score -= 20
+    if not dns_ok:
+        score -= 5
+    score = max(score, 0)
+    highlights.append(f"Reading score: {score}/100. This is from repeats, resets, and lookup problems in this capture only.")
     highlights.append(f"Gateway guess: {gateway}. This is the .1 address if one was seen, not a measured ping.")
     if dns_times:
         highlights.append("Name lookups: " + ", ".join(f"{name} {ms} ms" for name, ms in dns_times[:5]) + ".")
@@ -333,6 +343,7 @@ def analyze(packets, source):
         "dns_times": [{"name": name, "ms": ms} for name, ms in dns_times[:8]],
         "dns_health": dns_health,
         "gateway": gateway,
+        "score": score,
         "why_slow": why_it_looks_slow({"metrics": {"repeated_sequences": repeats, "resets": resets}, "alerts": alerts, "names": sorted(names)}),
         "metrics": {
             "packet_count": len(packets),

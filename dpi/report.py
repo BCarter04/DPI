@@ -77,6 +77,7 @@ Active talks       {len(summary.get('flows') or [])}
 Name lookups       {len(summary.get('dns_times') or [])}
 DNS health         {escape(summary.get('dns_health') or 'Not seen')}
 Gateway guess      {escape(summary.get('gateway') or 'not seen')}
+Reading score      {summary.get('score', '')}/100
 Repeated packets   {metrics.get('repeated_sequences', 0)}
 Resets             {metrics.get('resets', 0)}
 Possible QUIC      {metrics.get('quic_packets', 0)}

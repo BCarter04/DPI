@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Watch keeps the same status block and refreshes `live-output\report.html` every round. Press Ctrl+C to stop. Run the demo first if you want to see the page before a live check.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. If the traffic mix says "Phones, printers, and TVs", that is ports 5353 and 1900. Those devices announce themselves on the home network. It is not a web page.
 
 ## Check this computer, then install
 

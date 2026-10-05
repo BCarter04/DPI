@@ -91,7 +91,7 @@ def main(argv=None):
     parser.add_argument("--seconds", type=int, default=15, help="Seconds for each watch round. Default: 15.")
     parser.add_argument("pcap_path", nargs="?", help="Capture file, used with: dpi pcap file.pcap")
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
-    parser.add_argument("--device", help="Only keep packets to or from this address.")
+    parser.add_argument("--app", help="After the reading, keep only talks that matched this app, for example YouTube.")
     parser.add_argument("--count", type=int, default=80, help="Live packet count. Default: 80.")
     parser.add_argument("--out", default=None, help="Report folder. Live writes to live-output. Demo writes to dpi-output.")
     # Keep the old flags working.
@@ -152,6 +152,9 @@ def main(argv=None):
                     batch = [packet for packet in batch if IP in packet and args.device in (packet[IP].src, packet[IP].dst)]
                 collected.extend(batch)
                 summary = analyze(collected, f"watch on {iface}, the network this computer is using")
+                if args.app:
+                    wanted = args.app.lower()
+                    summary["flows"] = [flow for flow in summary["flows"] if wanted in (flow.get("app") or "").lower()]
                 html_path = write_outputs(summary, out_dir)
                 print(f"\nRound: {len(collected)} packets so far. Wrote {html_path}")
                 print_summary(summary)
@@ -165,6 +168,10 @@ def main(argv=None):
         out_dir = args.out or "dpi-output"
     if args.command == "pcap" or args.pcap:
         out_dir = args.out or "dpi-output"
+    if args.app:
+        wanted = args.app.lower()
+        summary["flows"] = [flow for flow in summary["flows"] if wanted in (flow.get("app") or "").lower()]
+        summary["highlights"].insert(0, f"Filtered to the app name {args.app}. Other talks are hidden.")
     print_summary(summary)
     html_path = write_outputs(summary, out_dir)
     print(f"\nWrote {html_path}")
