@@ -56,18 +56,21 @@ def keep_device(packets, address):
     if not kept:
         raise SystemExit(f"No packets touched {address}. Check the address, or run without --device.")
     return kept
+
+
+def print_summary(summary):
     metrics = summary["metrics"]
-    print("\nDPI reading")
-    print("-----------")
-    print(f"Source: {summary['source']}")
-    print(f"Packets: {metrics['packet_count']}")
-    print(f"Local devices active: {len(summary.get('devices') or [])}")
-    print(f"Time span: {metrics['duration_seconds']} seconds")
-    print(f"Payload bytes: {metrics['total_payload_bytes']}")
-    print("\nWhat stands out")
-    for item in summary["highlights"]:
-        print(f"  - {item}")
-    print(f"Why it may be slow: {summary.get('why_slow')}")
+    print("\nNETWORK STATUS")
+    print(f"  Packets: {metrics['packet_count']}")
+    print(f"  Packets/sec: {metrics['packets_per_second']}")
+    print(f"  Active talks: {len(summary.get('flows') or [])}")
+    lookups = ", ".join(f"{item['name']} {item['ms']} ms" for item in summary.get("dns_times") or []) or "none timed"
+    print(f"  Name lookups: {lookups}")
+    print(f"  Repeated packets: {metrics.get('repeated_sequences', 0)}")
+    print(f"  Resets: {metrics.get('resets', 0)}")
+    print(f"  Apps: {', '.join(summary.get('apps') or []) or 'none named'}")
+    print(f"  Devices: {len(summary.get('devices') or [])}")
+    print(f"  Why it may be slow: {summary.get('why_slow')}")
     for item in summary.get("alerts") or []:
         print(f"  - {item}")
     print("\nBest guess by port")
@@ -88,6 +91,7 @@ def main(argv=None):
     parser.add_argument("--seconds", type=int, default=15, help="Seconds for each watch round. Default: 15.")
     parser.add_argument("pcap_path", nargs="?", help="Capture file, used with: dpi pcap file.pcap")
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
+    parser.add_argument("--device", help="Only keep packets to or from this address.")
     parser.add_argument("--count", type=int, default=80, help="Live packet count. Default: 80.")
     parser.add_argument("--out", default=None, help="Report folder. Live writes to live-output. Demo writes to dpi-output.")
     # Keep the old flags working.
