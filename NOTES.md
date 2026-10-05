@@ -8,7 +8,7 @@ The demo and the live check call the same `analyze()` and the same `write_html()
 
 1. `dpi/cli.py` starts demo, live, watch, check, and setup.
 2. `dpi/capture.py` builds the fake packets or reads the live card.
-3. `dpi/analyze.py` makes the facts: names, apps, devices, repeats, resets, lookup times.
+3. `dpi/analyze.py` makes the facts: names, apps, devices, repeats, resets, lookup times, and a health line for each talk. Demo and live both use this file.
 4. `dpi/report.py` writes the Network status block at the top of report.html.
 5. `dpi/why.py` turns those facts into one slow-link sentence.
 6. `HOW_TO_USE.md` is the run guide for someone who does not write code.

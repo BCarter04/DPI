@@ -189,9 +189,25 @@ def analyze(packets, source):
             "fingerprint": None,
             "dns_name": None,
             "app": None,
+            "resets": 0,
+            "repeats": 0,
+            "syn": 0,
         })
         flow["packets"] += 1
         flow["bytes"] += len(payload)
+        if facts:
+            if "RST" in facts["flags"]:
+                flow["resets"] += 1
+            if "SYN" in facts["flags"]:
+                flow["syn"] += 1
+            if facts["seq"] and mark in seen_seq:
+                flow["repeats"] += 1
+        if flow["repeats"] or flow["resets"]:
+            flow["health"] = f"repeats {flow['repeats']}, resets {flow['resets']}. A repeat can mean a lost packet was sent again."
+        elif flow["syn"]:
+            flow["health"] = "A start packet was seen. The page itself stays hidden."
+        else:
+            flow["health"] = "No reset or repeat on this talk."
         if server_name:
             flow["server_name"] = server_name
             flow["category"] = "Encrypted web (HTTPS)"
