@@ -45,6 +45,12 @@ def launch():
     def run_job(kind):
         def work():
             try:
+                if kind == "check":
+                    from dpi.doctor import check_computer, exe_ready
+                    text = "\n".join(check_computer() + [exe_ready()])
+                    set_status(text)
+                    messagebox.showinfo("DPI check", text)
+                    return
                 if kind == "demo":
                     packets = build_demo_packets()
                     source = "built-in demo (fake packets, not your network)"
@@ -89,6 +95,7 @@ def launch():
     ttk.Label(row, text="Packets to read").pack(side="left")
     ttk.Entry(row, textvariable=count, width=8).pack(side="left", padx=8)
     ttk.Button(frame, text="Check this network (live)", command=lambda: run_job("live")).pack(fill="x", pady=4)
+    ttk.Button(frame, text="Check this computer", command=lambda: run_job("check")).pack(fill="x", pady=4)
     ttk.Button(frame, text="Run demo (fake packets)", command=lambda: run_job("demo")).pack(fill="x", pady=4)
     ttk.Label(frame, text="Live reads the network this computer is connected to. On Windows, open this window as Administrator after Npcap is installed. The demo does not use your network.", wraplength=580).pack(anchor="w", pady=(8, 0))
     ttk.Label(frame, textvariable=status, wraplength=580).pack(anchor="w", pady=16)

@@ -59,7 +59,7 @@ def print_summary(summary):
     print("\nWhat stands out")
     for item in summary["highlights"]:
         print(f"  - {item}")
-    print("\nWarnings")
+    print(f"Why it may be slow: {summary.get('why_slow')}")
     for item in summary.get("alerts") or []:
         print(f"  - {item}")
     print("\nBest guess by port")

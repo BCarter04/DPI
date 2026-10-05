@@ -18,6 +18,7 @@ from collections import defaultdict
 from dpi.apps import guess_app
 from dpi.devices import devices_in_packets
 from dpi.health import dns_facts, tcp_facts
+from dpi.why import why_it_looks_slow
 
 PORT_GUIDE = [
     ({80, 8080, 8000}, "Web, not encrypted", "Port 80 is the old web port. The page text can be visible."),
@@ -271,6 +272,7 @@ def analyze(packets, source):
         "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
         "highlights": highlights,
         "alerts": alerts,
+        "why_slow": why_it_looks_slow({"metrics": {"repeated_sequences": repeats, "resets": resets}, "alerts": alerts, "names": sorted(names)}),
         "metrics": {
             "packet_count": len(packets),
             "duration_seconds": round(duration, 3),
