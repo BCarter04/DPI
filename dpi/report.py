@@ -3,8 +3,9 @@
 Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
 
 What it does now
-    Turns the analysis into report.html: counts, what stands out, busiest
-    addresses, and conversations. No extra library is required.
+    Writes report.html for both the demo and a live capture. The top block
+    is Network status: packets, lookups, repeated packets, resets, apps,
+    devices, and why it may be slow. The same function writes both reports.
 
 What it will do
     Later pages can add charts. They should keep the same plain-language

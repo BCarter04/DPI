@@ -4,13 +4,14 @@ Read this before the Python files. Each file also has a short note at the top.
 
 ## What it does now
 
-DPI reads packets and writes a plain-language report. It does not decrypt anything.
+The demo and the live check call the same `analyze()` and the same `write_html()`. If a reading is added, it must show in both. The demo uses fake packets. Live uses the network this computer is connected to.
 
-1. `dpi/cli.py` is the front door. `dpi demo`, `dpi live`, and `dpi pcap file.pcap` all come through here.
-2. `dpi/capture.py` gets the packets. The demo builds fake ones. Live mode picks the connected network card. A pcap file is a saved capture.
-3. `dpi/analyze.py` turns packets into facts: port guess, conversation, DNS name, TLS server name, handshake fingerprint, busiest addresses.
-4. `dpi/report.py` writes `report.html`. The same facts also go to `summary.json` and `conversations.csv`.
-5. `DPI.py` is the old way to start the program. After `python -m pip install .`, the `dpi` command is the normal way.
+1. `dpi/cli.py` starts demo, live, watch, check, and setup.
+2. `dpi/capture.py` builds the fake packets or reads the live card.
+3. `dpi/analyze.py` makes the facts: names, apps, devices, repeats, resets, lookup times.
+4. `dpi/report.py` writes the Network status block at the top of report.html.
+5. `dpi/why.py` turns those facts into one slow-link sentence.
+6. `HOW_TO_USE.md` is the run guide for someone who does not write code.
 
 A port guess is only a hint. Port 443 usually means encrypted web, but other apps use it too. A server name is read only if the handshake still shows it. The page itself stays hidden.
 

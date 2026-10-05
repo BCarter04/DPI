@@ -1,3 +1,14 @@
+# How to run DPI
+
+The demo and a live run use the same reading. The top of both reports is Network status. Demo packets are fake. Live packets come from the network this computer is using.
+
+```bat
+python DPI.py demo
+python DPI.py live --count 80
+```
+
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, and why it may be slow. Notes on what each file does are in NOTES.md and at the top of each Python file.
+
 ## Check this computer, then install
 
 In the DPI folder:
