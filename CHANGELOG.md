@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.0
+
+- Watch mode now reprints the full Network status each round, for a live network.
+- The demo still uses the same status block, so you can check the reading first.
+
 ## 2.1.0
 
 - DNS health and a gateway guess on the demo and live report.

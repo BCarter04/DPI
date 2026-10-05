@@ -154,8 +154,7 @@ def main(argv=None):
                 summary = analyze(collected, f"watch on {iface}, the network this computer is using")
                 html_path = write_outputs(summary, out_dir)
                 print(f"\nRound: {len(collected)} packets so far. Wrote {html_path}")
-                for item in summary.get("alerts") or []:
-                    print(f"  - {item}")
+                print_summary(summary)
         except KeyboardInterrupt:
             print("\nStopped.")
             return summary if collected else None

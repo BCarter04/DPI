@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Both reports also show DNS health and a gateway guess. DNS health is Good only if a lookup was answered and none failed. The gateway guess is a .1 address that was seen, not a ping time.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Watch keeps the same status block and refreshes `live-output\report.html` every round. Press Ctrl+C to stop. Run the demo first if you want to see the page before a live check.
 
 ## Check this computer, then install
 
