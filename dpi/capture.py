@@ -55,6 +55,8 @@ def build_demo_packets():
     add(IP(src="10.0.0.8", dst="203.0.113.50") / TCP(sport=51003, dport=443) / Raw(load=client_hello("cdn.example.net")), 0.2)
     add(IP(src="10.0.0.8", dst="203.0.113.80") / TCP(sport=51005, dport=443) / Raw(load=client_hello("rr3.googlevideo.com")), 0.1)
     add(IP(src="10.0.0.8", dst="203.0.113.81") / TCP(sport=51006, dport=443) / Raw(load=client_hello("ipv4-c002.nflxvideo.net")), 0.1)
+    add(IP(src="10.0.0.8", dst="203.0.113.82") / TCP(sport=51007, dport=443) / Raw(load=client_hello("www.bbc.co.uk")), 0.1)
+    add(IP(src="10.0.0.8", dst="203.0.113.83") / TCP(sport=51008, dport=443) / Raw(load=client_hello("www.gov.uk")), 0.1)
     add(IP(src="10.0.0.8", dst="10.0.0.1") / UDP(sport=48000, dport=123) / Raw(load=b"\x1b" + b"\x00" * 47), 0.15)
     add(IP(src="10.0.0.8", dst="198.51.100.20") / TCP(sport=51004, dport=4444) / Raw(load=b"\x99" * 24), 0.12)
     return packets

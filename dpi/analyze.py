@@ -32,7 +32,20 @@ PORT_GUIDE = [
     ({137, 138, 139, 445}, "File sharing", "These ports are used by Windows-style file sharing."),
     ({5060, 5061}, "Calls (VoIP)", "These ports are used by some internet phone calls."),
     ({1194}, "VPN", "Port 1194 is the usual OpenVPN port."),
-    ({1935}, "Video stream", "Port 1935 is an older video-streaming port."),
+    ({3389}, "Remote desktop", "Port 3389 is usually Windows remote desktop."),
+    ({5900}, "Screen share (VNC)", "Port 5900 is a remote screen share."),
+    ({3306, 5432, 1433}, "Database", "These ports are used by database servers."),
+    ({993, 995, 143, 110}, "Mailbox", "These ports read mail. The message stays hidden on the secure ones."),
+    ({500, 4500, 1723, 51820}, "VPN", "These ports are used by VPN tunnels."),
+    ({6881, 6882}, "File swarm", "These ports are often used by torrent programs."),
+    ({25565}, "Game (Minecraft)", "Port 25565 is the usual Minecraft port."),
+    ({3074}, "Game (Xbox)", "Port 3074 is used by some Xbox live traffic."),
+    ({27015, 27036}, "Game (Steam)", "These ports are used by Steam game traffic."),
+    ({554, 1935}, "Video stream", "These ports are older video-stream ports."),
+    ({853}, "Private name lookup", "Port 853 is DNS over TLS. The lookup stays hidden."),
+    ({5353, 1900}, "Home discovery", "These ports let devices find each other on the local network."),
+    ({5222, 5223}, "Chat", "These ports are used by some chat apps."),
+    ({88, 389, 636}, "Work login", "These ports are used by office login systems."),
 ]
 PROTO_NAMES = {1: "ICMP", 6: "TCP", 17: "UDP"}
 
@@ -223,6 +236,7 @@ def analyze(packets, source):
             flow["app"] = app
             flow["confidence"] = confidence
             apps.add(app)
+            categories[app] += flow["packets"]
             flow["why"] = f"The visible name matches {app}. Confidence is high. The page or video is still hidden."
 
     duration = (max(times) - min(times)) if len(times) >= 2 else 0.0

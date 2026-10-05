@@ -1,4 +1,28 @@
-# DPI 2.0
+# DPI
+
+Network traffic explained in plain English. It does not decrypt pages, videos, or searches.
+
+The demo and a live run use the same report. The top of the page is Network status. The traffic mix includes a best guess from the port and, when a site name is visible, a match from a list of common apps used in the UK and elsewhere.
+
+## Try it
+
+```bat
+python DPI.py demo
+python DPI.py live --count 80
+```
+
+Open `dpi-output\report.html` or `live-output\report.html`. The full steps are in [HOW_TO_USE.md](HOW_TO_USE.md). What each file does is in [NOTES.md](NOTES.md). What is stored is in [PRIVACY.md](PRIVACY.md).
+
+| Command | What it does |
+| --- | --- |
+| `python DPI.py demo` | Fake packets. No admin rights. |
+| `python DPI.py live --count 80` | The network this computer is using. |
+| `python DPI.py watch --seconds 15` | Keeps reading and refreshes the report. |
+| `python DPI.py check` | Says if this computer is ready. |
+| `python DPI.py setup` | Installs the Python pieces. |
+| `build_exe.bat` | Builds `dist\DPI.exe` on Windows. |
+
+A live check on Windows needs Npcap and Run as administrator. Only monitor a network you are allowed to monitor. Owner: Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
 
 A small package that reads network packets and explains them in plain words.
 
