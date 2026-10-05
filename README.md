@@ -1,4 +1,4 @@
-# DPI 2.2.0
+# DPI 2.3.0
 
 Network traffic explained in plain English. It does not decrypt pages, videos, or searches.
 

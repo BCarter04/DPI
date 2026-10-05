@@ -83,7 +83,7 @@ Possible QUIC      {metrics.get('quic_packets', 0)}
 Apps               {escape(', '.join(summary.get('apps') or []) or 'none named')}
 Devices            {len(summary.get('devices') or [])}
 Why it may be slow {escape(summary.get('why_slow') or '')}</pre></div>
-<h2>Warnings</h2><div class="panel"><ul>{''.join(f'<li>{escape(item)}</li>' for item in summary.get('alerts') or ['None'])}</ul></div>
+<h2>Apps seen</h2><div class="panel"><ul>{''.join(f"<li>{escape(item['name'])}: confidence {escape(item['confidence'])}. Evidence: {escape(', '.join(item['evidence']) or 'name match')}</li>" for item in summary.get('apps_seen') or []) or '<li>No listed app name was visible.</li>'}</ul><p>This is a name match, not the page or the video. Demo and live use the same list.</p></div>
 <h2>Name lookups</h2><div class="panel"><p>{escape(', '.join(f"{item['name']} {item['ms']} ms" for item in summary.get('dns_times') or []) or 'No timed lookup in this capture. The same check runs on the demo and on a live network.')}</p></div>
 <h2>Why it may be slow</h2><div class="panel"><p>{escape(summary.get('why_slow') or 'No reading yet.')}</p></div>
 <h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>

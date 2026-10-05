@@ -310,6 +310,14 @@ def analyze(packets, source):
         "A device count is who talked, or who answered on the local network. A silent device is not listed.",
         "Watch mode keeps reading until you press Ctrl+C. Refresh the report to see the latest round.",
     ]
+    apps_seen = {}
+    for flow in flow_list:
+        if flow.get("app"):
+            item = apps_seen.setdefault(flow["app"], {"name": flow["app"], "evidence": set(), "confidence": flow.get("confidence") or "high"})
+            seen = flow.get("server_name") or flow.get("dns_name")
+            if seen:
+                item["evidence"].add(seen)
+    apps_seen = [{"name": item["name"], "confidence": item["confidence"], "evidence": sorted(item["evidence"])} for item in apps_seen.values()]
     return {
         "source": source,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -320,6 +328,7 @@ def analyze(packets, source):
         "devices": [{"address": address, "how": "seen in this capture"} for address in local_devices],
         "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
         "highlights": highlights,
+        "apps_seen": apps_seen,
         "alerts": alerts,
         "dns_times": [{"name": name, "ms": ms} for name, ms in dns_times[:8]],
         "dns_health": dns_health,

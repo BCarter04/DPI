@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0
+
+- Apps seen now lists the name, the confidence, and the site that matched.
+- Demo and live use the same list.
+
 ## 2.2.0
 
 - Watch mode now reprints the full Network status each round, for a live network.
