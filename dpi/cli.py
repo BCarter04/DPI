@@ -47,7 +47,15 @@ def write_outputs(summary, out_dir):
     return html_path
 
 
-def print_summary(summary):
+def keep_device(packets, address):
+    """Keep only packets that touch one computer. Empty means keep all."""
+    if not address:
+        return packets
+    from scapy.all import IP
+    kept = [packet for packet in packets if IP in packet and address in (packet[IP].src, packet[IP].dst)]
+    if not kept:
+        raise SystemExit(f"No packets touched {address}. Check the address, or run without --device.")
+    return kept
     metrics = summary["metrics"]
     print("\nDPI reading")
     print("-----------")
@@ -111,12 +119,12 @@ def main(argv=None):
         path = args.pcap_path or args.pcap
         if not path:
             parser.error("Give a capture file, for example: dpi pcap capture.pcap")
-        packets = load_pcap(path)
+        packets = keep_device(load_pcap(path), args.device)
         source = f"pcap file {path}"
         summary = analyze(packets, source)
     elif args.command == "live" or args.live or args.iface:
         iface = args.iface or choose_live_interface()
-        packets = capture_live(iface, args.count)
+        packets = keep_device(capture_live(iface, args.count), args.device)
         source = f"live capture on {iface}, the network this computer is using"
         if not packets:
             raise SystemExit(f"No packets were read on {iface}. Run this window as Administrator, install Npcap, and pick the Wi-Fi or Ethernet name.")
@@ -135,6 +143,9 @@ def main(argv=None):
         try:
             while True:
                 batch = capture_for_seconds(iface, args.seconds)
+                if args.device:
+                    from scapy.all import IP
+                    batch = [packet for packet in batch if IP in packet and args.device in (packet[IP].src, packet[IP].dst)]
                 collected.extend(batch)
                 summary = analyze(collected, f"watch on {iface}, the network this computer is using")
                 html_path = write_outputs(summary, out_dir)
