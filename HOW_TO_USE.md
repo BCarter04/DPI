@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. The traffic mix can name common apps and sites when the name is visible, including BBC, GOV.UK, NHS, banks, shops, and streaming apps used in England. A name match is not the page or the video.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Both reports also show DNS health and a gateway guess. DNS health is Good only if a lookup was answered and none failed. The gateway guess is a .1 address that was seen, not a ping time.
 
 ## Check this computer, then install
 

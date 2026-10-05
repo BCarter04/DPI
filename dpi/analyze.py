@@ -283,6 +283,12 @@ def analyze(packets, source):
         highlights.append(f"{resets} connection(s) were reset. A reset means one side closed the talk abruptly.")
     if dns_problems:
         highlights.append("DNS problems: " + "; ".join(dns_problems[:5]) + ".")
+    dns_ok = len(dns_times)
+    dns_bad = len(dns_problems)
+    dns_health = "Good" if dns_ok and not dns_bad else "Check" if dns_bad else "Not seen"
+    gateway = next((item for item in local_devices if item.endswith(".1")), "not seen")
+    highlights.append(f"DNS health: {dns_health}. Timed replies: {dns_ok}. Failed replies: {dns_bad}.")
+    highlights.append(f"Gateway guess: {gateway}. This is the .1 address if one was seen, not a measured ping.")
     if dns_times:
         highlights.append("Name lookups: " + ", ".join(f"{name} {ms} ms" for name, ms in dns_times[:5]) + ".")
     else:
@@ -316,6 +322,8 @@ def analyze(packets, source):
         "highlights": highlights,
         "alerts": alerts,
         "dns_times": [{"name": name, "ms": ms} for name, ms in dns_times[:8]],
+        "dns_health": dns_health,
+        "gateway": gateway,
         "why_slow": why_it_looks_slow({"metrics": {"repeated_sequences": repeats, "resets": resets}, "alerts": alerts, "names": sorted(names)}),
         "metrics": {
             "packet_count": len(packets),
