@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.5.0
+
+- Download and upload bytes on the demo and live status block.
+- These are payload sizes in the capture, not a broadband speed test.
+
 ## 2.4.0
 
 - A reading score out of 100, from repeats, resets, and failed lookups.

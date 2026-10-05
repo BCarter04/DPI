@@ -296,7 +296,9 @@ def analyze(packets, source):
         score -= 20
     if not dns_ok:
         score -= 5
-    score = max(score, 0)
+    download_bytes = 0
+    upload_bytes = 0
+    local_set = set(local_devices)
     highlights.append(f"Reading score: {score}/100. This is from repeats, resets, and lookup problems in this capture only.")
     highlights.append(f"Gateway guess: {gateway}. This is the .1 address if one was seen, not a measured ping.")
     if dns_times:
@@ -320,6 +322,15 @@ def analyze(packets, source):
         "A device count is who talked, or who answered on the local network. A silent device is not listed.",
         "Watch mode keeps reading until you press Ctrl+C. Refresh the report to see the latest round.",
     ]
+    for flow in flow_list:
+        parts = flow["who"].split(" ↔ ")
+        if len(parts) == 2:
+            left, right = parts[0].rsplit(":", 1)[0], parts[1].rsplit(":", 1)[0]
+            if left in local_set and right not in local_set:
+                upload_bytes += flow["bytes"]
+            elif right in local_set and left not in local_set:
+                download_bytes += flow["bytes"]
+    highlights.append(f"Download-side bytes: {download_bytes}. Upload-side bytes: {upload_bytes}. This is payload size in this capture, not a speed test.")
     apps_seen = {}
     for flow in flow_list:
         if flow.get("app"):
@@ -344,6 +355,8 @@ def analyze(packets, source):
         "dns_health": dns_health,
         "gateway": gateway,
         "score": score,
+        "download_bytes": download_bytes,
+        "upload_bytes": upload_bytes,
         "why_slow": why_it_looks_slow({"metrics": {"repeated_sequences": repeats, "resets": resets}, "alerts": alerts, "names": sorted(names)}),
         "metrics": {
             "packet_count": len(packets),

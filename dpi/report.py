@@ -78,6 +78,8 @@ Name lookups       {len(summary.get('dns_times') or [])}
 DNS health         {escape(summary.get('dns_health') or 'Not seen')}
 Gateway guess      {escape(summary.get('gateway') or 'not seen')}
 Reading score      {summary.get('score', '')}/100
+Download bytes     {summary.get('download_bytes', 0)}
+Upload bytes       {summary.get('upload_bytes', 0)}
 Repeated packets   {metrics.get('repeated_sequences', 0)}
 Resets             {metrics.get('resets', 0)}
 Possible QUIC      {metrics.get('quic_packets', 0)}
