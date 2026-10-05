@@ -121,6 +121,8 @@ def analyze(packets, source):
     quic = 0
     resets = 0
     repeats = 0
+    dns_asked = {}
+    dns_times = []
     dns_problems = []
     seen_seq = set()
     payload_bytes = 0
@@ -163,8 +165,15 @@ def analyze(packets, source):
                 repeats += 1
             seen_seq.add(mark)
         dns = dns_facts(packet)
-        if dns and dns["problem"]:
-            dns_problems.append(f"{dns['name']}: {dns['problem']}")
+        if dns:
+            if dns["problem"]:
+                dns_problems.append(f"{dns['name']}: {dns['problem']}")
+            if dns["reply"]:
+                asked = dns_asked.get(dns["name"])
+                if asked is not None and stamp:
+                    dns_times.append((dns["name"], round((stamp - asked) * 1000, 1)))
+            elif stamp:
+                dns_asked[dns["name"]] = stamp
         server_name, fingerprint = read_server_name(payload)
         dns_name = read_dns_name(packet)
         if dns_name:
@@ -244,6 +253,10 @@ def analyze(packets, source):
         highlights.append(f"{resets} connection(s) were reset. A reset means one side closed the talk abruptly.")
     if dns_problems:
         highlights.append("DNS problems: " + "; ".join(dns_problems[:5]) + ".")
+    if dns_times:
+        highlights.append("Name lookups: " + ", ".join(f"{name} {ms} ms" for name, ms in dns_times[:5]) + ".")
+    else:
+        highlights.append("No name-lookup timing was visible. Live mode only times a lookup if both the question and the answer are captured.")
     alerts = []
     if repeats:
         alerts.append(f"{repeats} packet(s) looked repeated. The link may be busy or losing packets.")
@@ -272,6 +285,7 @@ def analyze(packets, source):
         "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
         "highlights": highlights,
         "alerts": alerts,
+        "dns_times": [{"name": name, "ms": ms} for name, ms in dns_times[:8]],
         "why_slow": why_it_looks_slow({"metrics": {"repeated_sequences": repeats, "resets": resets}, "alerts": alerts, "names": sorted(names)}),
         "metrics": {
             "packet_count": len(packets),

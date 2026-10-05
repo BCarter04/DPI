@@ -45,7 +45,7 @@ def build_demo_packets():
         packets.append(packet)
 
     add(IP(src="10.0.0.8", dst="1.1.1.1") / UDP(sport=53000, dport=53) / DNS(rd=1, qd=DNSQR(qname="example.com")), 0.01)
-    add(IP(src="1.1.1.1", dst="10.0.0.8") / UDP(sport=53, dport=53000) / Raw(load=b"demo-dns-reply"), 0.02)
+    add(IP(src="1.1.1.1", dst="10.0.0.8") / UDP(sport=53, dport=53000) / DNS(qr=1, ra=1, qd=DNSQR(qname="example.com")), 0.02)
     add(IP(src="10.0.0.8", dst="93.184.216.34") / TCP(sport=51000, dport=80) / Raw(load=b"GET /hello HTTP/1.1\r\nHost: example.com\r\n\r\n"), 0.05)
     add(IP(src="93.184.216.34", dst="10.0.0.8") / TCP(sport=80, dport=51000) / Raw(load=b"HTTP/1.1 200 OK\r\n\r\nhello"), 0.04)
     add(IP(src="10.0.0.8", dst="93.184.216.34") / TCP(sport=51001, dport=443) / Raw(load=client_hello("www.example.com")), 0.08)

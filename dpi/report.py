@@ -74,6 +74,7 @@ th, td {{ text-align:left; padding:8px 6px; border-bottom:1px solid #e4e9ef; }}
 <div class="card"><b>{metrics['packets_per_second']}</b>packets per second</div>
 <div class="card"><b>{metrics['total_payload_bytes']}</b>payload bytes</div>
 </div>
+<h2>Name lookups</h2><div class="panel"><p>{escape(', '.join(f"{item['name']} {item['ms']} ms" for item in summary.get('dns_times') or []) or 'No timed lookup in this capture. The same check runs on the demo and on a live network.')}</p></div>
 <h2>Why it may be slow</h2><div class="panel"><p>{escape(summary.get('why_slow') or 'No reading yet.')}</p></div>
 <h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>
 <h2>Traffic mix</h2><div class="panel">{_bars(sorted(summary['categories'].items(), key=lambda item: -item[1]))}</div>
