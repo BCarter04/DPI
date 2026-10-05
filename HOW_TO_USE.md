@@ -1,4 +1,23 @@
-# How to run DPI on your own computer
+# How to run DPI if you do not write code
+
+You do not need to understand the Python files to use this.
+
+1. Install Python from https://www.python.org and tick "Add python.exe to PATH".
+2. Open the DPI folder.
+3. In the folder address bar, type `cmd` and press Enter.
+4. Type `python DPI.py demo` and press Enter.
+5. Open `dpi-output\report.html`. That is a fake example, not your network.
+
+To read your own network, right-click Command Prompt, choose Run as administrator, go to the folder, and type:
+
+```bat
+python DPI.py live --count 80
+```
+
+Open `live-output\report.html`. The first line should say live capture, not demo.
+
+The report tells you, in normal words, which apps were named, which local devices answered, and whether a connection was reset or a packet looked repeated. It does not show the video, the search, or the page. Reports stay on this computer until you delete the output folder.
+
 
 This program explains packets in normal words. It does not decrypt pages, videos, or searches.
 

@@ -12,6 +12,7 @@ What it will do
 """
 
 import argparse
+import csv
 import json
 import os
 import sys
@@ -29,12 +30,19 @@ def write_outputs(summary, out_dir):
     html_path = os.path.join(out_dir, "report.html")
     with open(json_path, "w", encoding="utf-8") as handle:
         json.dump(summary, handle, indent=2)
-    with open(csv_path, "w", encoding="utf-8") as handle:
-        handle.write("who,category,name,packets,bytes,why\n")
+    with open(csv_path, "w", encoding="utf-8", newline="") as handle:
+        writer = csv.writer(handle)
+        writer.writerow(["who", "category", "name", "app", "packets", "bytes", "why"])
         for flow in summary["flows"]:
-            name = flow.get("server_name") or flow.get("dns_name") or ""
-            why = flow["why"].replace('"', "'")
-            handle.write(f"\"{flow['who']}\",\"{flow['category']}\",\"{name}\",{flow['packets']},{flow['bytes']},\"{why}\"\n")
+            writer.writerow([
+                flow["who"],
+                flow["category"],
+                flow.get("server_name") or flow.get("dns_name") or "",
+                flow.get("app") or "",
+                flow["packets"],
+                flow["bytes"],
+                flow["why"],
+            ])
     write_html(html_path, summary)
     return html_path
 

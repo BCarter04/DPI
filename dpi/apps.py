@@ -32,11 +32,14 @@ APP_MARKS = [
 
 
 def guess_app(name):
-    """Return an app name, or None if the visible name is not in the list."""
+    """Return (app, confidence) from a visible name, or (None, None).
+
+    A name match is high confidence. It is still not the video title.
+    """
     if not name:
-        return None
+        return None, None
     host = name.lower().rstrip(".")
     for app, marks in APP_MARKS:
         if any(mark in host for mark in marks):
-            return app
-    return None
+            return app, "high, because the site name matched"
+    return None, None

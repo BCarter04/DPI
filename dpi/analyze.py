@@ -17,6 +17,7 @@ from collections import defaultdict
 
 from dpi.apps import guess_app
 from dpi.devices import devices_in_packets
+from dpi.health import dns_facts, tcp_facts
 
 PORT_GUIDE = [
     ({80, 8080, 8000}, "Web, not encrypted", "Port 80 is the old web port. The page text can be visible."),
@@ -116,6 +117,11 @@ def analyze(packets, source):
     flows = {}
     names = set()
     apps = set()
+    quic = 0
+    resets = 0
+    repeats = 0
+    dns_problems = []
+    seen_seq = set()
     payload_bytes = 0
     sizes = []
     times = []
@@ -142,6 +148,22 @@ def analyze(packets, source):
         else:
             category, sentence = right
         categories[category] += 1
+        if transport == "UDP" and 443 in (sport, dport):
+            quic += 1
+            categories["Possible QUIC (HTTP/3)"] += 1
+            category = "Possible QUIC (HTTP/3)"
+            sentence = "UDP port 443 is often QUIC, used by some video apps. The video stays hidden."
+        facts = tcp_facts(packet)
+        if facts:
+            if "RST" in facts["flags"]:
+                resets += 1
+            mark = (src, sport, dst, dport, facts["seq"])
+            if facts["seq"] and mark in seen_seq:
+                repeats += 1
+            seen_seq.add(mark)
+        dns = dns_facts(packet)
+        if dns and dns["problem"]:
+            dns_problems.append(f"{dns['name']}: {dns['problem']}")
         server_name, fingerprint = read_server_name(payload)
         dns_name = read_dns_name(packet)
         if dns_name:
@@ -170,11 +192,12 @@ def analyze(packets, source):
         if dns_name:
             flow["dns_name"] = dns_name
         seen = flow.get("server_name") or flow.get("dns_name")
-        app = guess_app(seen)
+        app, confidence = guess_app(seen)
         if app:
             flow["app"] = app
+            flow["confidence"] = confidence
             apps.add(app)
-            flow["why"] = f"The visible name matches {app}. The page or video is still hidden."
+            flow["why"] = f"The visible name matches {app}. Confidence is high. The page or video is still hidden."
 
     duration = (max(times) - min(times)) if len(times) >= 2 else 0.0
     window = duration if duration > 0 else None
@@ -212,10 +235,19 @@ def analyze(packets, source):
         short = sum(1 for gap in gaps if gap < 0.05)
         if short >= max(3, len(gaps) // 2):
             highlights.append("Many packets arrived close together. That often means a busy download or a burst of traffic, not a slow lookup.")
+    if quic:
+        highlights.append(f"{quic} packet(s) used UDP port 443. That is often QUIC, not ordinary web. The content is still hidden.")
+    if repeats:
+        highlights.append(f"{repeats} repeated TCP sequence number(s). That can mean a lost packet was sent again. It is a hint, not proof of the cause.")
+    if resets:
+        highlights.append(f"{resets} connection(s) were reset. A reset means one side closed the talk abruptly.")
+    if dns_problems:
+        highlights.append("DNS problems: " + "; ".join(dns_problems[:5]) + ".")
     notes = [
         "Nothing was decrypted. Encrypted page contents stay encrypted.",
         "A port label is a hint. Many apps share port 443.",
         "An app name is a match on the visible site name, not proof of which video or search was used.",
+        "A repeated sequence number is a simple loss hint. A short capture can miss the real cause.",
         "A device count is who talked, or who answered on the local network. A silent device is not listed.",
     ]
     return {
@@ -235,6 +267,9 @@ def analyze(packets, source):
             "packets_per_second": round(len(packets) / window, 2) if window else None,
             "bytes_per_second": round(payload_bytes / window, 2) if window else None,
             "protocol_names": dict(protocols),
+            "repeated_sequences": repeats,
+            "resets": resets,
+            "quic_packets": quic,
         },
         "notes": notes,
     }
