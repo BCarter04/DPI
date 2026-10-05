@@ -243,12 +243,22 @@ def analyze(packets, source):
         highlights.append(f"{resets} connection(s) were reset. A reset means one side closed the talk abruptly.")
     if dns_problems:
         highlights.append("DNS problems: " + "; ".join(dns_problems[:5]) + ".")
+    alerts = []
+    if repeats:
+        alerts.append(f"{repeats} packet(s) looked repeated. The link may be busy or losing packets.")
+    if resets:
+        alerts.append(f"{resets} talk(s) were cut off with a reset.")
+    if dns_problems:
+        alerts.append("A name lookup failed: " + "; ".join(dns_problems[:3]) + ".")
+    if not alerts:
+        alerts.append("No warning in this capture. A short check can miss a problem.")
     notes = [
         "Nothing was decrypted. Encrypted page contents stay encrypted.",
         "A port label is a hint. Many apps share port 443.",
         "An app name is a match on the visible site name, not proof of which video or search was used.",
         "A repeated sequence number is a simple loss hint. A short capture can miss the real cause.",
         "A device count is who talked, or who answered on the local network. A silent device is not listed.",
+        "Watch mode keeps reading until you press Ctrl+C. Refresh the report to see the latest round.",
     ]
     return {
         "source": source,
@@ -260,6 +270,7 @@ def analyze(packets, source):
         "devices": [{"address": address, "how": "seen in this capture"} for address in local_devices],
         "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
         "highlights": highlights,
+        "alerts": alerts,
         "metrics": {
             "packet_count": len(packets),
             "duration_seconds": round(duration, 3),

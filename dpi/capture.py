@@ -105,7 +105,14 @@ def choose_live_interface():
 
 
 def capture_live(interface, count):
+    """Read a set number of packets, then stop. This is the short live check."""
     from scapy.all import sniff
     print(f"Listening on {interface} for {count} packets.")
     print("Only do this on a network you are allowed to monitor. Browse to create traffic.")
     return sniff(iface=interface, count=count, timeout=30)
+
+
+def capture_for_seconds(interface, seconds):
+    """Keep reading for a few seconds. Used by watch mode, which repeats this."""
+    from scapy.all import sniff
+    return sniff(iface=interface, timeout=seconds)

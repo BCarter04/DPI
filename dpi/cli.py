@@ -18,7 +18,7 @@ import os
 import sys
 
 from dpi.analyze import analyze
-from dpi.capture import build_demo_packets, capture_live, choose_live_interface, load_pcap
+from dpi.capture import build_demo_packets, capture_for_seconds, capture_live, choose_live_interface, load_pcap
 from dpi.devices import devices_on_link
 from dpi.report import write_html
 
@@ -59,6 +59,9 @@ def print_summary(summary):
     print("\nWhat stands out")
     for item in summary["highlights"]:
         print(f"  - {item}")
+    print("\nWarnings")
+    for item in summary.get("alerts") or []:
+        print(f"  - {item}")
     print("\nBest guess by port")
     for name, count in sorted(summary["categories"].items(), key=lambda item: -item[1]):
         print(f"  {name}: {count}")
@@ -73,7 +76,8 @@ def print_summary(summary):
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Read network traffic in plain language. Does not decrypt anything.")
-    parser.add_argument("command", nargs="?", choices=["demo", "live", "pcap", "window"], help="demo, live, pcap, or window")
+    parser.add_argument("command", nargs="?", choices=["demo", "live", "watch", "pcap", "window"], help="demo, live, watch, pcap, or window")
+    parser.add_argument("--seconds", type=int, default=15, help="Seconds for each watch round. Default: 15.")
     parser.add_argument("pcap_path", nargs="?", help="Capture file, used with: dpi pcap file.pcap")
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
     parser.add_argument("--count", type=int, default=80, help="Live packet count. Default: 80.")
@@ -107,6 +111,24 @@ def main(argv=None):
             summary["devices"] = [{"address": address, "how": "answered on the local network"} for address in linked]
             summary["highlights"].insert(0, f"{len(linked)} device(s) answered on the local network: {', '.join(linked)}.")
         out_dir = args.out or "live-output"
+    elif args.command == "watch":
+        iface = args.iface or choose_live_interface()
+        print(f"Watching {iface}. Press Ctrl+C to stop. The report refreshes each round.")
+        print("Only do this on a network you are allowed to monitor.")
+        collected = []
+        out_dir = args.out or "live-output"
+        try:
+            while True:
+                batch = capture_for_seconds(iface, args.seconds)
+                collected.extend(batch)
+                summary = analyze(collected, f"watch on {iface}, the network this computer is using")
+                html_path = write_outputs(summary, out_dir)
+                print(f"\nRound: {len(collected)} packets so far. Wrote {html_path}")
+                for item in summary.get("alerts") or []:
+                    print(f"  - {item}")
+        except KeyboardInterrupt:
+            print("\nStopped.")
+            return summary if collected else None
     else:
         packets = build_demo_packets()
         source = "built-in demo (fake packets, not your network)"

@@ -74,7 +74,7 @@ th, td {{ text-align:left; padding:8px 6px; border-bottom:1px solid #e4e9ef; }}
 <div class="card"><b>{metrics['packets_per_second']}</b>packets per second</div>
 <div class="card"><b>{metrics['total_payload_bytes']}</b>payload bytes</div>
 </div>
-<h2>What stands out</h2><div class="panel"><ul>{highlights}</ul></div>
+<h2>Warnings</h2><div class="panel"><ul>{''.join(f'<li>{escape(item)}</li>' for item in summary.get('alerts') or ['None'])}</ul></div>
 <h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>
 <h2>Traffic mix</h2><div class="panel">{_bars(sorted(summary['categories'].items(), key=lambda item: -item[1]))}</div>
 <p>Source: {escape(summary['source'])}. Owner: Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.</p>

@@ -14,7 +14,13 @@ To read your own network, right-click Command Prompt, choose Run as administrato
 python DPI.py live --count 80
 ```
 
-Open `live-output\report.html`. The first line should say live capture, not demo.
+To keep watching instead of stopping after 80 packets, in that same Administrator window:
+
+```bat
+python DPI.py watch --seconds 15
+```
+
+It rewrites `live-output\report.html` every 15 seconds. Press Ctrl+C to stop. Refresh the page to see the latest warnings.
 
 The report tells you, in normal words, which apps were named, which local devices answered, and whether a connection was reset or a packet looked repeated. It does not show the video, the search, or the page. Reports stay on this computer until you delete the output folder.
 
