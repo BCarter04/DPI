@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.36.0
+
+- The window shows the same local-network guess as the report.
+- Demo and live use the same guess. It is the private range seen in the capture, not a scan of the internet.
+
 ## 2.35.0
 
 - The window shows the same gateway guess as the report.
