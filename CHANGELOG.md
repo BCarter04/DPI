@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.31.0
+
+- The window shows the same named apps as the report.
+- Demo and live use the same list. A name is a guess, not the page or the video.
+
 ## 2.30.0
 
 - The window shows the same reading score as the report.
