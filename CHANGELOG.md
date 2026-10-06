@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.32.0
+
+- The window shows the same DNS health line as the report.
+- Demo and live use the same line. A lookup is timed only if the question and answer were both seen.
+
 ## 2.31.0
 
 - The window shows the same named apps as the report.
