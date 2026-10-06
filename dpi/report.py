@@ -80,6 +80,7 @@ Active talks       {len(summary.get('flows') or [])}
 Name lookups       {len(summary.get('dns_times') or [])}
 DNS health         {escape(summary.get('dns_health') or 'Not seen')}
 Gateway guess      {escape(summary.get('gateway') or 'not seen')}
+Local network      {escape(summary.get('subnet') or 'not seen')}
 Reading score      {summary.get('score', '')}/100
 Download bytes     {summary.get('download_bytes', 0)}
 Upload bytes       {summary.get('upload_bytes', 0)}
@@ -96,7 +97,7 @@ Answered      {(summary.get('dns_summary') or {}).get('answered', 0)}
 Failed        {(summary.get('dns_summary') or {}).get('failed', 0)}
 Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') if (summary.get('dns_summary') or {}).get('average_ms') is not None else 'not timed'))} ms</pre>
 <p>The same counts are used for the demo and a live run. A lookup is timed only if both the question and the answer were captured.</p></div>
-<h2>Why it may be slow</h2><div class="panel"><p>{escape(summary.get('why_slow') or 'No reading yet.')}</p></div>
+<h2>Warnings</h2><div class="panel"><ul>{''.join(f'<li>{escape(item)}</li>' for item in summary.get('alerts') or ['No warning in this capture.'])}</ul><p>A warning is a hint from this capture. It is not proof of a broken router or a broken website.</p></div>
 <h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>
 <h2>What this page is doing</h2>
 <div class="panel">

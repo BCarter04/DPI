@@ -343,6 +343,14 @@ def analyze(packets, source):
     apps_seen = [{"name": item["name"], "confidence": item["confidence"], "evidence": sorted(item["evidence"])} for item in apps_seen.values()]
     average_ms = round(sum(ms for _, ms in dns_times) / len(dns_times), 1) if dns_times else None
     dns_summary = {"answered": len(dns_times), "failed": len(dns_problems), "average_ms": average_ms, "health": dns_health}
+    if average_ms and average_ms > 200:
+        alerts.append(f"Name lookups were slow: average {average_ms} ms. A short capture can still miss the cause.")
+    subnet = "not seen"
+    if local_devices:
+        parts = local_devices[0].split(".")
+        if len(parts) == 4:
+            subnet = ".".join(parts[:3]) + ".0/24"
+    highlights.append(f"Local network guess: {subnet}. This is the home range of the first local address, not a router scan.")
     return {
         "source": source,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -359,6 +367,7 @@ def analyze(packets, source):
         "dns_health": dns_health,
         "dns_summary": dns_summary,
         "gateway": gateway,
+        "subnet": subnet,
         "score": score,
         "download_bytes": download_bytes,
         "upload_bytes": upload_bytes,

@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.12.0
+
+- Warnings are a block on the report, for the demo and a live run.
+- A local network guess, such as 10.0.0.0/24, sits next to the gateway guess.
+- A slow name lookup, over 200 ms, is called out.
+
 ## 2.11.0
 
 - Each traffic-mix bar now shows a packet count and a percentage.

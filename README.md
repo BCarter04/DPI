@@ -1,4 +1,18 @@
-# DPI 2.11.0
+# DPI 2.12.0
+
+Network traffic explained in plain English. It does not decrypt pages.
+
+```text
+Network or capture file
+        |
+        v
+Capture  ->  Analyze  ->  DNS, apps, devices, talk health
+                                |
+                                v
+                         Report: page, JSON, spreadsheet
+```
+
+The demo and a live run use that same path.
 
 Network traffic explained in plain English. It does not decrypt pages, videos, or searches.
 
