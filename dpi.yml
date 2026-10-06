@@ -1,0 +1,6 @@
+# Optional settings. Plain text, not a required file.
+# Demo and live both read this if you pass --config dpi.yml
+
+capture:
+  packet_limit: 80
+  interface: auto
