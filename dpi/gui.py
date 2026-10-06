@@ -77,7 +77,7 @@ def launch():
                 from dpi.report import top_guess
                 warning = (summary.get("alerts") or ["No warning in this capture."])[0]
                 apps = ", ".join(summary.get("apps") or []) or "none named"
-                set_status(f"Wrote {path}. Score: {summary.get('score')}/100. DNS: {summary.get('dns_health')}. Apps: {apps}. Top guess: {top_guess(summary)}. Warning: {warning}. Why it may be slow: {summary.get('why_slow')}. Devices: {roles}")
+                set_status(f"Wrote {path}. Score: {summary.get('score')}/100. DNS: {summary.get('dns_health')}. Apps: {apps}. Devices: {len(summary.get('devices') or [])}. Top guess: {top_guess(summary)}. Warning: {warning}. Why it may be slow: {summary.get('why_slow')}. {roles}")
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")

@@ -1,4 +1,4 @@
-# DPI 2.32.0
+# DPI 2.33.0
 
 Network traffic explained in plain English. It does not decrypt pages.
 

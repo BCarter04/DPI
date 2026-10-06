@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.33.0
+
+- The window shows the same device count as the report.
+- A quality check confirms the demo report still has the score, apps, DNS line, and limits.
+
 ## 2.32.0
 
 - The window shows the same DNS health line as the report.
