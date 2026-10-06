@@ -76,7 +76,17 @@ def launch():
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")
-                messagebox.showerror("DPI", str(error))
+                if isinstance(error, IndexError):
+                    text = (
+                        "Could not read one packet: it was cut off.\n\n"
+                        "A live packet arrived shorter than a full name lookup or handshake. "
+                        "DPI stopped on that packet instead of guessing. "
+                        "This is not a decrypt error, and it does not mean Npcap is missing.\n\n"
+                        "Try the demo first. For a live check, close this window, open it with Run as administrator, and try again."
+                    )
+                else:
+                    text = str(error)
+                messagebox.showerror("DPI", text)
         threading.Thread(target=work, daemon=True).start()
 
     frame = ttk.Frame(root, padding=16)

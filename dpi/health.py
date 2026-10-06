@@ -43,10 +43,13 @@ def dns_facts(packet):
         return None
     if DNS not in packet or packet[DNS].qd is None:
         return None
-    name = packet[DNS].qd.qname
-    if isinstance(name, bytes):
-        name = name.decode("utf-8", "replace")
-    name = str(name).rstrip(".")
-    reply = int(packet[DNS].qr) == 1
-    problem = DNS_PROBLEMS.get(int(packet[DNS].rcode)) if reply else None
-    return {"name": name, "reply": reply, "problem": problem}
+    try:
+        name = packet[DNS].qd.qname
+        if isinstance(name, bytes):
+            name = name.decode("utf-8", "replace")
+        name = str(name).rstrip(".")
+        reply = int(packet[DNS].qr) == 1
+        problem = DNS_PROBLEMS.get(int(packet[DNS].rcode)) if reply else None
+        return {"name": name, "reply": reply, "problem": problem}
+    except (IndexError, AttributeError, TypeError):
+        return None

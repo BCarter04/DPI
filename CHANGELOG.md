@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.6.0
+
+- A short live packet no longer needs to stop the reading with "list index out of range".
+- The window names this "Could not read one packet: it was cut off" instead of "list index out of range".
+- Demo and live still use the same report.
+
 ## 2.5.0
 
 - Download and upload bytes on the demo and live status block.
