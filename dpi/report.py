@@ -112,7 +112,10 @@ Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') i
 <h2>Conversations</h2>
 <div class="panel"><table><thead><tr><th>Who talked</th><th>Best guess</th><th>Name seen</th><th>Talk health</th><th>Packets</th><th>Bytes</th><th>Seconds</th><th>Handshake ms</th></tr></thead>
 <tbody>{''.join(flow_rows)}</tbody></table></div>
-<h2>How to read this</h2><ul>{notes}</ul>
+<h2>Limits of this reading</h2>
+<div class="panel">
+<p>Nothing was decrypted. A port is only a hint. A short check can miss a problem. Site names are remembered on this computer for 7 days, and that is not a malware check.</p>
+</div>
 </main></body></html>"""
     with open(path, "w", encoding="utf-8") as handle:
         handle.write(html)

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.20.0
+
+- The report states the limits: no decryption, a port is a hint, a short check can miss a problem.
+- A test checks that a site name is new only once in the 7-day memory.
+
 ## 2.19.0
 
 - Site names are remembered for 7 days, with the day they were first seen.
