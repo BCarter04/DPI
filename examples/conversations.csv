@@ -1,0 +1,8 @@
+who,category,name,packets,bytes,why
+"10.0.0.8:51001 ↔ 93.184.216.34:443","Encrypted web (HTTPS)","www.example.com",3,204,"The handshake named www.example.com. The page contents are still hidden."
+"10.0.0.8:51003 ↔ 203.0.113.50:443","Encrypted web (HTTPS)","cdn.example.net",1,78,"The handshake named cdn.example.net. The page contents are still hidden."
+"10.0.0.8:51000 ↔ 93.184.216.34:80","Web, not encrypted","",2,66,"Port 80 is the old web port. The page text can be visible."
+"10.0.0.8:48000 ↔ 10.0.0.1:123","Clock sync (NTP)","",1,48,"Port 123 is used to check the time."
+"10.0.0.8:53000 ↔ 1.1.1.1:53","Name lookup (DNS)","example.com",2,43,"Port 53 turns a name like example.com into an address."
+"10.0.0.8:51004 ↔ 198.51.100.20:4444","Other","",1,24,"TCP port 4444 is not in the short well-known list."
+"10.0.0.8:51002 ↔ 203.0.113.10:22","Remote login (SSH)","",1,14,"Port 22 is usually a secure shell login."

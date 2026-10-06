@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Warnings are hints from this capture only. A local network line such as 192.168.1.0/24 is a guess from a local address, not a scan of every house on the street.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Seconds on a talk is how long that talk was visible in the capture, not a ping time. `--port 443` hides other talks. `dpi.yml` can set the packet limit. Demo and live both read it.
 
 ```bat
 python DPI.py demo --reach bbc.co.uk

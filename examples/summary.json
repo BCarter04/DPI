@@ -1,0 +1,133 @@
+{
+  "source": "built-in demo (fake packets, not your network)",
+  "generated_at": "2026-10-01T12:38:17",
+  "categories": {
+    "Name lookup (DNS)": 2,
+    "Web, not encrypted": 2,
+    "Encrypted web (HTTPS)": 4,
+    "Remote login (SSH)": 1,
+    "Clock sync (NTP)": 1,
+    "Other": 1
+  },
+  "flows": [
+    {
+      "who": "10.0.0.8:51001 \u2194 93.184.216.34:443",
+      "category": "Encrypted web (HTTPS)",
+      "why": "The handshake named www.example.com. The page contents are still hidden.",
+      "packets": 3,
+      "bytes": 204,
+      "server_name": "www.example.com",
+      "fingerprint": "ciphers:002f-c02f;ext:0",
+      "dns_name": null
+    },
+    {
+      "who": "10.0.0.8:51003 \u2194 203.0.113.50:443",
+      "category": "Encrypted web (HTTPS)",
+      "why": "The handshake named cdn.example.net. The page contents are still hidden.",
+      "packets": 1,
+      "bytes": 78,
+      "server_name": "cdn.example.net",
+      "fingerprint": "ciphers:002f-c02f;ext:0",
+      "dns_name": null
+    },
+    {
+      "who": "10.0.0.8:51000 \u2194 93.184.216.34:80",
+      "category": "Web, not encrypted",
+      "why": "Port 80 is the old web port. The page text can be visible.",
+      "packets": 2,
+      "bytes": 66,
+      "server_name": null,
+      "fingerprint": null,
+      "dns_name": null
+    },
+    {
+      "who": "10.0.0.8:48000 \u2194 10.0.0.1:123",
+      "category": "Clock sync (NTP)",
+      "why": "Port 123 is used to check the time.",
+      "packets": 1,
+      "bytes": 48,
+      "server_name": null,
+      "fingerprint": null,
+      "dns_name": null
+    },
+    {
+      "who": "10.0.0.8:53000 \u2194 1.1.1.1:53",
+      "category": "Name lookup (DNS)",
+      "why": "Port 53 turns a name like example.com into an address.",
+      "packets": 2,
+      "bytes": 43,
+      "server_name": null,
+      "fingerprint": null,
+      "dns_name": "example.com"
+    },
+    {
+      "who": "10.0.0.8:51004 \u2194 198.51.100.20:4444",
+      "category": "Other",
+      "why": "TCP port 4444 is not in the short well-known list.",
+      "packets": 1,
+      "bytes": 24,
+      "server_name": null,
+      "fingerprint": null,
+      "dns_name": null
+    },
+    {
+      "who": "10.0.0.8:51002 \u2194 203.0.113.10:22",
+      "category": "Remote login (SSH)",
+      "why": "Port 22 is usually a secure shell login.",
+      "packets": 1,
+      "bytes": 14,
+      "server_name": null,
+      "fingerprint": null,
+      "dns_name": null
+    }
+  ],
+  "names": [
+    "cdn.example.net",
+    "example.com",
+    "www.example.com"
+  ],
+  "talkers": [
+    {
+      "address": "10.0.0.8",
+      "bytes": 477
+    },
+    {
+      "address": "93.184.216.34",
+      "bytes": 270
+    },
+    {
+      "address": "203.0.113.50",
+      "bytes": 78
+    },
+    {
+      "address": "10.0.0.1",
+      "bytes": 48
+    },
+    {
+      "address": "1.1.1.1",
+      "bytes": 43
+    }
+  ],
+  "highlights": [
+    "Visible names: cdn.example.net, example.com, www.example.com.",
+    "1 packets used a port this tool does not recognise. A port is only a hint.",
+    "Busiest conversation: 10.0.0.8:51001 \u2194 93.184.216.34:443 (204 bytes).",
+    "Payload sizes ran from 14 to 83 bytes. Size and timing are still visible when the page is not."
+  ],
+  "metrics": {
+    "packet_count": 11,
+    "duration_seconds": 0.84,
+    "total_payload_bytes": 477,
+    "packets_per_second": 13.1,
+    "bytes_per_second": 567.86,
+    "protocol_names": {
+      "UDP": 3,
+      "TCP": 8
+    }
+  },
+  "notes": [
+    "Nothing was decrypted. Encrypted page contents stay encrypted.",
+    "A port label is a hint. Many apps share port 443.",
+    "Speed uses the real time from the first packet to the last."
+  ]
+}

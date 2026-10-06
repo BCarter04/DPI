@@ -205,7 +205,12 @@ def analyze(packets, source):
             "resets": 0,
             "repeats": 0,
             "syn": 0,
+            "first": stamp,
+            "last": stamp,
         })
+        if stamp:
+            flow["first"] = stamp if flow.get("first") is None else min(flow["first"], stamp)
+            flow["last"] = stamp if flow.get("last") is None else max(flow["last"], stamp)
         flow["packets"] += 1
         flow["bytes"] += len(payload)
         if facts:
@@ -215,6 +220,10 @@ def analyze(packets, source):
                 flow["syn"] += 1
             if facts["seq"] and mark in seen_seq:
                 flow["repeats"] += 1
+        if flow.get("first") is not None and flow.get("last") is not None and flow["last"] >= flow["first"]:
+            flow["duration"] = round(flow["last"] - flow["first"], 3)
+        else:
+            flow["duration"] = None
         if flow["repeats"] or flow["resets"]:
             flow["health"] = f"repeats {flow['repeats']}, resets {flow['resets']}. A repeat can mean a lost packet was sent again."
         elif flow["syn"]:
@@ -312,7 +321,10 @@ def analyze(packets, source):
         alerts.append(f"{resets} talk(s) were cut off with a reset.")
     if dns_problems:
         alerts.append("A name lookup failed: " + "; ".join(dns_problems[:3]) + ".")
-    if not alerts:
+    if top_talkers and payload_bytes:
+        share = round(100 * top_talkers[0][1] / payload_bytes)
+        if share >= 50:
+            alerts.append(f"{top_talkers[0][0]} moved about {share}% of the payload in this capture.")
         alerts.append("No warning in this capture. A short check can miss a problem.")
     notes = [
         "Nothing was decrypted. Encrypted page contents stay encrypted.",

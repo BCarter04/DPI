@@ -95,6 +95,9 @@ def main(argv=None):
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
     parser.add_argument("--app", help="After the reading, keep only talks that matched this app, for example YouTube.")
     parser.add_argument("--reach", help="Ask if this site name was visible, for example bbc.co.uk.")
+    parser.add_argument("--config", help="Optional settings file, for example dpi.yml.")
+    parser.add_argument("--port", type=int, help="Keep only talks that use this port, for example 443.")
+    parser.add_argument("--log", help="Also write a plain log file.")
     parser.add_argument("--count", type=int, default=80, help="Live packet count. Default: 80.")
     parser.add_argument("--out", default=None, help="Report folder. Live writes to live-output. Demo writes to dpi-output.")
     # Keep the old flags working.
@@ -103,6 +106,17 @@ def main(argv=None):
     parser.add_argument("--pcap", help="Capture file.")
     args = parser.parse_args(argv if argv is not None else sys.argv[1:])
 
+    if args.config and os.path.exists(args.config):
+        text = open(args.config, encoding="utf-8").read()
+        for line in text.splitlines():
+            if "packet_limit:" in line and args.count == 80:
+                try:
+                    args.count = int(line.split(":", 1)[1].strip())
+                except ValueError:
+                    pass
+    if args.log:
+        with open(args.log, "a", encoding="utf-8") as handle:
+            handle.write(f"Starting {args.command or 'demo'}. Packet limit {args.count}.\n")
     if args.command == "check":
         from dpi.doctor import check_computer, exe_ready
         for line in check_computer():
@@ -181,6 +195,9 @@ def main(argv=None):
         wanted = args.app.lower()
         summary["flows"] = [flow for flow in summary["flows"] if wanted in (flow.get("app") or "").lower()]
         summary["highlights"].insert(0, f"Filtered to the app name {args.app}. Other talks are hidden.")
+    if args.port:
+        summary["flows"] = [flow for flow in summary["flows"] if f":{args.port}" in flow["who"]]
+        summary["highlights"].insert(0, f"Filtered to port {args.port}. Other talks are hidden.")
     fresh = compare_names(summary.get("names") or [])
     note = "New since the last run on this computer: " + ", ".join(fresh) + "." if fresh else "No new site name since the last run on this computer."
     summary["highlights"].insert(0, note)

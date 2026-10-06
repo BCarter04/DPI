@@ -46,7 +46,7 @@ def write_html(path, summary):
             f"<td>{escape(flow['category'])}</td>"
             f"<td>{escape(seen)}</td>"
             f"<td>{escape(flow.get('health') or '')}</td>"
-            f"<td>{flow['packets']}</td><td>{flow['bytes']}</td></tr>"
+            f"<td>{flow['packets']}</td><td>{flow['bytes']}</td><td>{escape(str(flow.get('duration') if flow.get('duration') is not None else '—'))}</td></tr>"
         )
     if not flow_rows:
         flow_rows.append("<tr><td colspan='5'>No conversations found.</td></tr>")
@@ -109,7 +109,7 @@ Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') i
 <p>Source: {escape(summary['source'])}. Owner: Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.</p>
 <h2>Busiest addresses</h2><div class="panel"><ul>{talker_rows}</ul></div>
 <h2>Conversations</h2>
-<div class="panel"><table><thead><tr><th>Who talked</th><th>Best guess</th><th>Name seen</th><th>Talk health</th><th>Packets</th><th>Bytes</th></tr></thead>
+<div class="panel"><table><thead><tr><th>Who talked</th><th>Best guess</th><th>Name seen</th><th>Talk health</th><th>Packets</th><th>Bytes</th><th>Seconds</th></tr></thead>
 <tbody>{''.join(flow_rows)}</tbody></table></div>
 <h2>How to read this</h2><ul>{notes}</ul>
 </main></body></html>"""
