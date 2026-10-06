@@ -94,6 +94,7 @@ def main(argv=None):
     parser.add_argument("pcap_path", nargs="?", help="Capture file, used with: dpi pcap file.pcap")
     parser.add_argument("--iface", help="Live interface name, for example Wi-Fi.")
     parser.add_argument("--app", help="After the reading, keep only talks that matched this app, for example YouTube.")
+    parser.add_argument("--reach", help="Ask if this site name was visible, for example bbc.co.uk.")
     parser.add_argument("--count", type=int, default=80, help="Live packet count. Default: 80.")
     parser.add_argument("--out", default=None, help="Report folder. Live writes to live-output. Demo writes to dpi-output.")
     # Keep the old flags working.
@@ -183,6 +184,9 @@ def main(argv=None):
     fresh = compare_names(summary.get("names") or [])
     note = "New since the last run on this computer: " + ", ".join(fresh) + "." if fresh else "No new site name since the last run on this computer."
     summary["highlights"].insert(0, note)
+    if args.reach:
+        from dpi.reach import reach_note
+        summary["highlights"].insert(0, reach_note(summary, args.reach))
     print_summary(summary)
     html_path = write_outputs(summary, out_dir)
     print(f"\nWrote {html_path}")

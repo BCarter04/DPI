@@ -330,7 +330,9 @@ def analyze(packets, source):
                 upload_bytes += flow["bytes"]
             elif right in local_set and left not in local_set:
                 download_bytes += flow["bytes"]
-    highlights.append(f"Download-side bytes: {download_bytes}. Upload-side bytes: {upload_bytes}. This is payload size in this capture, not a speed test.")
+    if top_talkers:
+        busiest_device, busiest_bytes = top_talkers[0]
+        highlights.append(f"Busiest address: {busiest_device} with {busiest_bytes} payload bytes. That is who moved the most in this capture.")
     apps_seen = {}
     for flow in flow_list:
         if flow.get("app"):

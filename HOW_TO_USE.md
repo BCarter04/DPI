@@ -7,7 +7,14 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. The first run on a computer lists the site names as new. The next run only lists names that were not saved in dpi-seen.json. Delete that file to start the memory again. Demo and live share the same file.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. To ask about one site:
+
+```bat
+python DPI.py demo --reach bbc.co.uk
+python DPI.py live --reach bbc.co.uk --count 80
+```
+
+If the name was visible, the page is still hidden. If it was not in the capture, a short check can miss it.
 
 ## Check this computer, then install
 

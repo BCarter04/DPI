@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.9.0
+
+- `--reach bbc.co.uk` says if that name was visible. Demo and live use the same check.
+- The report names the busiest address in the capture.
+
 ## 2.8.0
 
 - A demo or live run now says which site names are new since the last run on this computer.
