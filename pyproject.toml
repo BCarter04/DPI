@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dpi-reader"
-version = "2.25.0"
+version = "2.26.0"
 description = "Plain-language look at network traffic. Does not decrypt anything."
 readme = "README.md"
 requires-python = ">=3.10"

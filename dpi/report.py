@@ -88,6 +88,7 @@ Upload bytes       {summary.get('upload_bytes', 0)}
 Repeated packets   {metrics.get('repeated_sequences', 0)}
 Resets             {metrics.get('resets', 0)}
 Possible QUIC      {metrics.get('quic_packets', 0)}
+Top guess          {escape((lambda pairs: f"{pairs[0][0]} ({round(100 * pairs[0][1] / (sum(count for _, count in pairs) or 1))}%)" if pairs else "none")(sorted((summary.get('categories') or {}).items(), key=lambda item: -item[1])))}
 Apps               {escape(', '.join(summary.get('apps') or []) or 'none named')}
 Devices            {len(summary.get('devices') or [])}
 Why it may be slow {escape(summary.get('why_slow') or '')}</pre></div>

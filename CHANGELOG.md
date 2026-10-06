@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.26.0
+
+- The report names the top traffic guess and its share of packets.
+- Demo and live use the same line. It is not a speed test.
+
 ## 2.25.0
 
 - The report explains the reply gap. A dash means only one side was seen.
