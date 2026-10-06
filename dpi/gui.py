@@ -75,7 +75,8 @@ def launch():
                 path = write_outputs(summary, folder)
                 roles = ", ".join(f"{item['address']} ({item.get('role') or 'seen'})" for item in summary.get("devices") or []) or "no local address"
                 from dpi.report import top_guess
-                set_status(f"Wrote {path}. Top guess: {top_guess(summary)}. Why it may be slow: {summary.get('why_slow')}. Devices: {roles}")
+                warning = (summary.get("alerts") or ["No warning in this capture."])[0]
+                set_status(f"Wrote {path}. Top guess: {top_guess(summary)}. Warning: {warning}. Why it may be slow: {summary.get('why_slow')}. Devices: {roles}")
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.29.0
+
+- The window shows the same first warning as the report.
+- Demo and live use the same warning. It is a hint, not proof of a broken router.
+
 ## 2.28.0
 
 - The window shows the same slow-link sentence as the report.
