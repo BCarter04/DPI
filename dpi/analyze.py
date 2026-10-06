@@ -234,10 +234,18 @@ def analyze(packets, source):
             "last": stamp,
             "syn_time": None,
             "synack_time": None,
+            "seen_from": {},
         })
         if stamp:
             flow["first"] = stamp if flow.get("first") is None else min(flow["first"], stamp)
             flow["last"] = stamp if flow.get("last") is None else max(flow["last"], stamp)
+        if stamp and src not in flow["seen_from"]:
+            flow["seen_from"][src] = stamp
+        if len(flow["seen_from"]) >= 2:
+            sides = sorted(flow["seen_from"].values())
+            flow["reply_gap_ms"] = round((sides[1] - sides[0]) * 1000, 1)
+        else:
+            flow["reply_gap_ms"] = None
         flow["packets"] += 1
         flow["bytes"] += len(payload)
         if facts:

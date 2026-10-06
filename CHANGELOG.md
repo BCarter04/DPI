@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.22.0
+
+- Each talk can show a reply gap: the time until the other side was seen.
+- This is not a ping test. Demo and live use the same column.
+
 ## 2.21.0
 
 - The report has a Home setup line for DHCP and for phones, printers, and TVs.
