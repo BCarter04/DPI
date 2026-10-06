@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.30.0
+
+- The window shows the same reading score as the report.
+- Demo and live use the same score. It drops if packets were repeated, a talk was reset, or a lookup failed.
+
 ## 2.29.0
 
 - The window shows the same first warning as the report.
