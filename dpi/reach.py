@@ -5,10 +5,6 @@ Copyright (c) 2023-2026 Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.
 What it does now
     Looks at names already found. It does not open the site, and it does
     not decrypt the page. Demo and live use the same check.
-
-What it will do
-    A later check can say the lookup failed before the handshake. It still
-    will not open the page.
 """
 
 
