@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Seconds on a talk is how long that talk was visible in the capture, not a ping time. `--port 443` hides other talks. `dpi.yml` can set the packet limit. Demo and live both read it.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Seconds on a talk is how long that talk was visible in the capture, not a ping time. `--port 443` hides other talks. `dpi.yml` can set the packet limit. Demo and live both read it. Site names are remembered for 7 days in dpi-seen.json. Delete that file to forget them. This is not a malware check.
 
 ```bat
 python DPI.py demo --reach bbc.co.uk
