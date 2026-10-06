@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.34.0
+
+- The window shows the same home-setup line as the report.
+- DHCP and phones, printers, and TVs are named only if those ports were seen. Demo and live use the same line.
+
 ## 2.33.0
 
 - The window shows the same device count as the report.
