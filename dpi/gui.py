@@ -67,12 +67,14 @@ def launch():
                     folder = "live-output"
                 summary = analyze(packets, source)
                 if kind == "live":
+                    from dpi.devices import role_for
                     linked = devices_on_link(iface)
                     if linked:
-                        summary["devices"] = [{"address": address, "how": "answered on the local network"} for address in linked]
+                        summary["devices"] = [{"address": address, "how": "answered on the local network", "role": role_for(address)} for address in linked]
                         summary["highlights"].insert(0, f"{len(linked)} device(s) answered on the local network: {', '.join(linked)}.")
                 path = write_outputs(summary, folder)
-                set_status(f"Wrote {path}")
+                roles = ", ".join(f"{item['address']} ({item.get('role') or 'seen'})" for item in summary.get("devices") or []) or "no local address"
+                set_status(f"Wrote {path}. Devices: {roles}")
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")

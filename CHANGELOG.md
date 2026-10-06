@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.24.0
+
+- The window shows the same device role as the report after a demo or a live check.
+- A live address ending in .1 is still only a likely router.
+
 ## 2.23.0
 
 - Each local address has a plain role. An address ending in .1 is called a likely router.
