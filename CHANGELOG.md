@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.16.0
+
+- A talk can show a handshake time when both the start and the reply were seen.
+- Demo and live use the same timing. It is not a ping test.
+
 ## 2.15.0
 
 - An empty capture now writes a full report instead of stopping.

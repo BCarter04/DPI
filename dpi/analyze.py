@@ -232,6 +232,8 @@ def analyze(packets, source):
             "syn": 0,
             "first": stamp,
             "last": stamp,
+            "syn_time": None,
+            "synack_time": None,
         })
         if stamp:
             flow["first"] = stamp if flow.get("first") is None else min(flow["first"], stamp)
@@ -241,18 +243,26 @@ def analyze(packets, source):
         if facts:
             if "RST" in facts["flags"]:
                 flow["resets"] += 1
-            if "SYN" in facts["flags"]:
-                flow["syn"] += 1
+            if "SYN" in facts["flags"] and "ACK" not in facts["flags"] and stamp:
+                flow["syn_time"] = stamp
+            if "SYN" in facts["flags"] and "ACK" in facts["flags"] and stamp:
+                flow["synack_time"] = stamp
             if facts["seq"] and mark in seen_seq:
                 flow["repeats"] += 1
         if flow.get("first") is not None and flow.get("last") is not None and flow["last"] >= flow["first"]:
             flow["duration"] = round(flow["last"] - flow["first"], 3)
         else:
             flow["duration"] = None
+        if flow.get("syn_time") and flow.get("synack_time") and flow["synack_time"] >= flow["syn_time"]:
+            flow["handshake_ms"] = round((flow["synack_time"] - flow["syn_time"]) * 1000, 1)
+        else:
+            flow["handshake_ms"] = None
         if flow["repeats"] or flow["resets"]:
             flow["health"] = f"repeats {flow['repeats']}, resets {flow['resets']}. A repeat can mean a lost packet was sent again."
         elif flow["syn"]:
             flow["health"] = "A start packet was seen. The page itself stays hidden."
+            if flow.get("handshake_ms") is not None:
+                flow["health"] = f"Handshake about {flow['handshake_ms']} ms. The page itself stays hidden."
         else:
             flow["health"] = "No reset or repeat on this talk."
         if server_name:
