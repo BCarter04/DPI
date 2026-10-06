@@ -78,7 +78,7 @@ def launch():
                 warning = (summary.get("alerts") or ["No warning in this capture."])[0]
                 apps = ", ".join(summary.get("apps") or []) or "none named"
                 home = ", ".join(name for name in ("Address setup (DHCP)", "Phones, printers, and TVs") if (summary.get("categories") or {}).get(name)) or "not seen"
-                set_status(f"Wrote {path}. Score: {summary.get('score')}/100. DNS: {summary.get('dns_health')}. Apps: {apps}. Devices: {len(summary.get('devices') or [])}. Home setup: {home}. Top guess: {top_guess(summary)}. Warning: {warning}. Why it may be slow: {summary.get('why_slow')}. {roles}")
+                set_status(f"Wrote {path}. Score: {summary.get('score')}/100. Gateway guess: {summary.get('gateway')}. DNS: {summary.get('dns_health')}. Apps: {apps}. Devices: {len(summary.get('devices') or [])}. Home setup: {home}. Top guess: {top_guess(summary)}. Warning: {warning}. Why it may be slow: {summary.get('why_slow')}. {roles}")
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")

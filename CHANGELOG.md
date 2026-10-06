@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.35.0
+
+- The window shows the same gateway guess as the report.
+- An address ending in .1 is only a guess. Demo and live use the same line.
+
 ## 2.34.0
 
 - The window shows the same home-setup line as the report.
