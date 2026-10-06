@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.18.0
+
+- Each timed name lookup is listed under DNS health, with its milliseconds.
+- Demo and live use the same list.
+
 ## 2.17.0
 
 - The report has a Handshake ms column. A dash means the start and reply were not both seen.
