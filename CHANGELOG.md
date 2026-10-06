@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.27.0
+
+- The window shows the same top traffic guess as the report.
+- Demo and live use the same share. It is not a speed test.
+
 ## 2.26.0
 
 - The report names the top traffic guess and its share of packets.

@@ -15,7 +15,14 @@ What it will do
 from html import escape
 
 
-def _bars(pairs):
+def top_guess(summary):
+    """The busiest guess and its share of packets. Not a speed test."""
+    pairs = sorted((summary.get("categories") or {}).items(), key=lambda item: -item[1])
+    if not pairs:
+        return "none"
+    total = sum(count for _, count in pairs) or 1
+    label, count = pairs[0]
+    return f"{label} ({round(100 * count / total)}%)"
     """Draw one bar per guess. The number is a share of the packets, not a speed."""
     if not pairs:
         return "<p>Nothing to show.</p>"
@@ -88,7 +95,7 @@ Upload bytes       {summary.get('upload_bytes', 0)}
 Repeated packets   {metrics.get('repeated_sequences', 0)}
 Resets             {metrics.get('resets', 0)}
 Possible QUIC      {metrics.get('quic_packets', 0)}
-Top guess          {escape((lambda pairs: f"{pairs[0][0]} ({round(100 * pairs[0][1] / (sum(count for _, count in pairs) or 1))}%)" if pairs else "none")(sorted((summary.get('categories') or {}).items(), key=lambda item: -item[1])))}
+Top guess          {escape(top_guess(summary))}
 Apps               {escape(', '.join(summary.get('apps') or []) or 'none named')}
 Devices            {len(summary.get('devices') or [])}
 Why it may be slow {escape(summary.get('why_slow') or '')}</pre></div>

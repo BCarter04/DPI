@@ -74,7 +74,8 @@ def launch():
                         summary["highlights"].insert(0, f"{len(linked)} device(s) answered on the local network: {', '.join(linked)}.")
                 path = write_outputs(summary, folder)
                 roles = ", ".join(f"{item['address']} ({item.get('role') or 'seen'})" for item in summary.get("devices") or []) or "no local address"
-                set_status(f"Wrote {path}. Devices: {roles}")
+                from dpi.report import top_guess
+                set_status(f"Wrote {path}. Top guess: {top_guess(summary)}. Devices: {roles}")
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")
