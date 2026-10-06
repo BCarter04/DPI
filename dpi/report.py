@@ -16,17 +16,20 @@ from html import escape
 
 
 def _bars(pairs):
+    """Draw one bar per guess. The number is a share of the packets, not a speed."""
     if not pairs:
         return "<p>Nothing to show.</p>"
+    total = sum(count for _, count in pairs) or 1
     top = max(count for _, count in pairs) or 1
     rows = []
     for label, count in pairs:
         width = max(4, int(100 * count / top))
+        share = round(100 * count / total)
         rows.append(
             "<div class='row'>"
             f"<div class='label'>{escape(str(label))}</div>"
             f"<div class='track'><div class='fill' style='width:{width}%'></div></div>"
-            f"<div class='count'>{count}</div></div>"
+            f"<div class='count'>{count} ({share}%)</div></div>"
         )
     return "\n".join(rows)
 
@@ -62,7 +65,7 @@ main {{ max-width:880px; margin:0 auto; padding:32px 20px 64px; }}
 .cards {{ display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; }}
 .card, .panel {{ background:#fff; border:1px solid #e4e9ef; border-radius:12px; padding:14px 16px; }}
 .card b {{ display:block; font-size:1.4rem; font-family:sans-serif; }}
-.row {{ display:grid; grid-template-columns:190px 1fr 48px; gap:10px; align-items:center; margin:8px 0; font-family:sans-serif; font-size:.92rem; }}
+.row {{ display:grid; grid-template-columns:190px 1fr 88px; gap:10px; align-items:center; margin:8px 0; font-family:sans-serif; font-size:.92rem; }}
 .track {{ background:#eef2f6; border-radius:999px; height:10px; }}
 .fill {{ background:#1f6feb; height:10px; border-radius:999px; }}
 table {{ width:100%; border-collapse:collapse; font-family:sans-serif; font-size:.92rem; }}

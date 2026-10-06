@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.11.0
+
+- Each traffic-mix bar now shows a packet count and a percentage.
+- Demo and live use the same bars.
+
 ## 2.10.0
 
 - The report explains what it is doing, and what the traffic mix bars mean.
