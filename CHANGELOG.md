@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.21.0
+
+- The report has a Home setup line for DHCP and for phones, printers, and TVs.
+- A warning is no longer added when another warning is already there.
+
 ## 2.20.0
 
 - The report states the limits: no decryption, a port is a hint, a short check can miss a problem.

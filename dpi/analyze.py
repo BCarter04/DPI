@@ -360,6 +360,7 @@ def analyze(packets, source):
         share = round(100 * top_talkers[0][1] / payload_bytes)
         if share >= 50:
             alerts.append(f"{top_talkers[0][0]} moved about {share}% of the payload in this capture.")
+    if not alerts:
         alerts.append("No warning in this capture. A short check can miss a problem.")
     notes = [
         "Nothing was decrypted. Encrypted page contents stay encrypted.",
@@ -398,6 +399,11 @@ def analyze(packets, source):
         if len(parts) == 4:
             subnet = ".".join(parts[:3]) + ".0/24"
     highlights.append(f"Local network guess: {subnet}. This is the home range of the first local address, not a router scan.")
+    local_services = [name for name in ("Address setup (DHCP)", "Phones, printers, and TVs") if categories.get(name)]
+    if local_services:
+        highlights.append("Home setup seen: " + ", ".join(local_services) + ". These are local announcements, not websites.")
+    else:
+        highlights.append("No DHCP or phone, printer, and TV announcement was in this capture.")
     return {
         "source": source,
         "generated_at": datetime.now().isoformat(timespec="seconds"),

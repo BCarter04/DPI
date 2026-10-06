@@ -81,6 +81,7 @@ Name lookups       {len(summary.get('dns_times') or [])}
 DNS health         {escape(summary.get('dns_health') or 'Not seen')}
 Gateway guess      {escape(summary.get('gateway') or 'not seen')}
 Local network      {escape(summary.get('subnet') or 'not seen')}
+Home setup         {escape(', '.join(name for name in ('Address setup (DHCP)', 'Phones, printers, and TVs') if (summary.get('categories') or {}).get(name)) or 'not seen')}
 Reading score      {summary.get('score', '')}/100
 Download bytes     {summary.get('download_bytes', 0)}
 Upload bytes       {summary.get('upload_bytes', 0)}
