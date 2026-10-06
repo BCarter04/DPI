@@ -23,6 +23,9 @@ def top_guess(summary):
     total = sum(count for _, count in pairs) or 1
     label, count = pairs[0]
     return f"{label} ({round(100 * count / total)}%)"
+
+
+def _bars(pairs):
     """Draw one bar per guess. The number is a share of the packets, not a speed."""
     if not pairs:
         return "<p>Nothing to show.</p>"
