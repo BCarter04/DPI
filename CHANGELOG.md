@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.28.0
+
+- The window shows the same slow-link sentence as the report.
+- Demo and live use the same sentence. A short check can still miss a problem.
+
 ## 2.27.0
 
 - The window shows the same top traffic guess as the report.
