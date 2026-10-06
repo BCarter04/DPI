@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.37.0
+
+- The window shows the same possible-QUIC count as the report.
+- UDP port 443 is only a hint. Demo and live use the same count. The content stays hidden.
+
 ## 2.36.0
 
 - The window shows the same local-network guess as the report.
