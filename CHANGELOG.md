@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.23.0
+
+- Each local address has a plain role. An address ending in .1 is called a likely router.
+- Demo and live use the same label. It is not a device name.
+
 ## 2.22.0
 
 - Each talk can show a reply gap: the time until the other side was seen.

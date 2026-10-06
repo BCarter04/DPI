@@ -100,7 +100,7 @@ Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') i
 <p>The same counts are used for the demo and a live run. A lookup is timed only if both the question and the answer were captured.</p>
 <ul>{''.join(f"<li>{escape(item['name'])}: {item['ms']} ms</li>" for item in summary.get('dns_times') or []) or '<li>No lookup was timed.</li>'}</ul>
 <h2>Warnings</h2><div class="panel"><ul>{''.join(f'<li>{escape(item)}</li>' for item in summary.get('alerts') or ['No warning in this capture.'])}</ul><p>A warning is a hint from this capture. It is not proof of a broken router or a broken website.</p></div>
-<h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>
+<h2>Devices active</h2><div class="panel"><ul>{''.join(f"<li>{escape(item['address'])}: {escape(item.get('role') or item.get('how') or 'seen')}</li>" for item in summary.get('devices') or []) or '<li>None seen.</li>'}</ul><p>A likely router is only an address ending in .1. A silent device is not listed. This is not a scan of the public internet.</p></div>
 <h2>What this page is doing</h2>
 <div class="panel">
 <p>The program groups packets into talks. A talk is both directions between two addresses and ports.</p>

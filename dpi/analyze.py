@@ -16,7 +16,7 @@ What it will do
 from collections import defaultdict
 
 from dpi.apps import guess_app
-from dpi.devices import devices_in_packets
+from dpi.devices import devices_in_packets, role_for
 from dpi.health import dns_facts, tcp_facts
 from dpi.why import why_it_looks_slow
 
@@ -419,7 +419,7 @@ def analyze(packets, source):
         "flows": flow_list,
         "names": sorted(names),
         "apps": sorted(apps),
-        "devices": [{"address": address, "how": "seen in this capture"} for address in local_devices],
+        "devices": [{"address": address, "how": "seen in this capture", "role": role_for(address)} for address in local_devices],
         "talkers": [{"address": address, "bytes": count} for address, count in top_talkers],
         "highlights": highlights,
         "apps_seen": apps_seen,

@@ -27,7 +27,11 @@ def is_local(address):
     return ip in ipaddress.ip_network("10.0.0.0/8") or ip in ipaddress.ip_network("172.16.0.0/12") or ip in ipaddress.ip_network("192.168.0.0/16")
 
 
-def devices_in_packets(packets):
+def role_for(address):
+    """A plain guess. An address ending in .1 is often the router. It is not a name."""
+    if str(address).endswith(".1"):
+        return "Likely router"
+    return "Computer that talked"
     """Private addresses that sent or received a packet in this capture."""
     from scapy.all import IP
     found = set()
