@@ -3,3 +3,6 @@ __pycache__/
 *.pyc
 .venv/
 venv/
+dpi-seen.json
+dpi_reader.egg-info/
+__pycache__/
