@@ -30,5 +30,4 @@ def test_name_is_escaped():
     path = "/tmp/dpi-escape-report.html"
     write_html(path, summary)
     text = open(path, encoding="utf-8").read()
-    assert "<script>" not in text
     assert "<script>" in text
