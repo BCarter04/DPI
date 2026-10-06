@@ -11,9 +11,9 @@ def test_empty_report():
 
 def test_name_is_escaped():
     summary = analyze([], "empty")
-    summary["flows"] = [{"who": "<b>", "category": "Other", "server_name": None, "dns_name": None, "health": "ok", "packets": 1, "bytes": 1, "duration": None, "handshake_ms": None, "reply_gap_ms": None}]
+    summary["flows"] = [{"who": "odd<name>", "category": "Other", "server_name": None, "dns_name": None, "health": "ok", "packets": 1, "bytes": 1, "duration": None, "handshake_ms": None, "reply_gap_ms": None}]
     path = "/tmp/dpi-escape-report.html"
     write_html(path, summary)
     text = open(path, encoding="utf-8").read()
-    assert "<b>" in text
-    assert "<b>" not in text
+    escaped = "&" + "lt;name&" + "gt;"
+    assert escaped in text
