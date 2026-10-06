@@ -18,6 +18,7 @@ import os
 import sys
 
 from dpi.analyze import analyze
+from dpi.baseline import compare_names
 from dpi.capture import build_demo_packets, capture_for_seconds, capture_live, choose_live_interface, load_pcap
 from dpi.devices import devices_on_link
 from dpi.report import write_html
@@ -61,6 +62,7 @@ def keep_device(packets, address):
 def print_summary(summary):
     metrics = summary["metrics"]
     print("\nNETWORK STATUS")
+    print(f"  {summary['highlights'][0] if summary.get('highlights') else ''}")
     print(f"  Packets: {metrics['packet_count']}")
     print(f"  Packets/sec: {metrics['packets_per_second']}")
     print(f"  Active talks: {len(summary.get('flows') or [])}")
@@ -178,6 +180,9 @@ def main(argv=None):
         wanted = args.app.lower()
         summary["flows"] = [flow for flow in summary["flows"] if wanted in (flow.get("app") or "").lower()]
         summary["highlights"].insert(0, f"Filtered to the app name {args.app}. Other talks are hidden.")
+    fresh = compare_names(summary.get("names") or [])
+    note = "New since the last run on this computer: " + ", ".join(fresh) + "." if fresh else "No new site name since the last run on this computer."
+    summary["highlights"].insert(0, note)
     print_summary(summary)
     html_path = write_outputs(summary, out_dir)
     print(f"\nWrote {html_path}")

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.8.0
+
+- A demo or live run now says which site names are new since the last run on this computer.
+- The list is saved in dpi-seen.json. It is not a malware check.
+
 ## 2.7.0
 
 - DNS health now shows answered, failed, and average time on the demo and live report.

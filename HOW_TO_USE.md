@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. The report has a DNS health block. Answered means a name question and its reply were both seen. Failed means the reply said the name was missing or refused. Average is the time between those two packets, not a speed test.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. The first run on a computer lists the site names as new. The next run only lists names that were not saved in dpi-seen.json. Delete that file to start the memory again. Demo and live share the same file.
 
 ## Check this computer, then install
 
