@@ -200,7 +200,7 @@ def main(argv=None):
         summary["highlights"].insert(0, f"Filtered to port {args.port}. Other talks are hidden.")
     fresh = compare_names(summary.get("names") or [])
     note = "New since the last run on this computer: " + ", ".join(fresh) + "." if fresh else "No new site name since the last run on this computer."
-    summary["highlights"].insert(0, note)
+    summary["highlights"].insert(0, note + " Names are remembered for 7 days. This is not a malware check.")
     if args.reach:
         from dpi.reach import reach_note
         summary["highlights"].insert(0, reach_note(summary, args.reach))

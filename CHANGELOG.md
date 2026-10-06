@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.19.0
+
+- Site names are remembered for 7 days, with the day they were first seen.
+- Demo and live use the same memory. It is not a malware check.
+
 ## 2.18.0
 
 - Each timed name lookup is listed under DNS health, with its milliseconds.
