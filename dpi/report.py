@@ -115,7 +115,7 @@ Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') i
 <tbody>{''.join(flow_rows)}</tbody></table></div>
 <h2>Limits of this reading</h2>
 <div class="panel">
-<p>Nothing was decrypted. A port is only a hint. A short check can miss a problem. Site names are remembered on this computer for 7 days, and that is not a malware check.</p>
+<p>Reply gap is the time until the other side of a talk was seen. A dash means only one side was captured. It is not a ping test.</p>
 </div>
 </main></body></html>"""
     with open(path, "w", encoding="utf-8") as handle:

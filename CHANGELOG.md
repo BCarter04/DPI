@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.25.0
+
+- The report explains the reply gap. A dash means only one side was seen.
+- A test checks an empty report and that a strange name cannot become a script.
+
 ## 2.24.0
 
 - The window shows the same device role as the report after a demo or a live check.
