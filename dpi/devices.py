@@ -32,6 +32,9 @@ def role_for(address):
     if str(address).endswith(".1"):
         return "Likely router"
     return "Computer that talked"
+
+
+def devices_in_packets(packets):
     """Private addresses that sent or received a packet in this capture."""
     from scapy.all import IP
     found = set()
