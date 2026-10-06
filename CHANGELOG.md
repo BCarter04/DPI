@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.17.0
+
+- The report has a Handshake ms column. A dash means the start and reply were not both seen.
+- Demo and live use the same column.
+
 ## 2.16.0
 
 - A talk can show a handshake time when both the start and the reply were seen.
