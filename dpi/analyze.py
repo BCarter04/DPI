@@ -141,6 +141,31 @@ def analyze(packets, source):
     payload_bytes = 0
     sizes = []
     times = []
+    if not packets:
+        return {
+            "source": source,
+            "generated_at": datetime.now().isoformat(timespec="seconds"),
+            "categories": {},
+            "flows": [],
+            "names": [],
+            "apps": [],
+            "devices": [],
+            "talkers": [],
+            "highlights": ["No packets were read. The demo does not need a network card. A live check needs Npcap and Administrator on Windows."],
+            "apps_seen": [],
+            "alerts": ["No packets were read."],
+            "dns_times": [],
+            "dns_health": "Not seen",
+            "dns_summary": {"answered": 0, "failed": 0, "average_ms": None, "health": "Not seen"},
+            "gateway": "not seen",
+            "subnet": "not seen",
+            "score": 0,
+            "download_bytes": 0,
+            "upload_bytes": 0,
+            "why_slow": "No packets were read, so there is no speed reading.",
+            "metrics": {"packet_count": 0, "duration_seconds": 0, "total_payload_bytes": 0, "packets_per_second": None, "bytes_per_second": None, "protocol_names": {}, "repeated_sequences": 0, "resets": 0, "quic_packets": 0},
+            "notes": ["Nothing was decrypted."],
+        }
 
     for packet in packets:
         stamp = float(getattr(packet, "time", 0) or 0)
