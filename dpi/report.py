@@ -46,7 +46,7 @@ def write_html(path, summary):
             f"<td>{escape(flow['category'])}</td>"
             f"<td>{escape(seen)}</td>"
             f"<td>{escape(flow.get('health') or '')}</td>"
-            f"<td>{flow['packets']}</td><td>{flow['bytes']}</td><td>{escape(str(flow.get('duration') if flow.get('duration') is not None else '—'))}</td><td>{escape(str(flow.get('handshake_ms') if flow.get('handshake_ms') is not None else '—'))}</td></tr>"
+            f"<td>{flow['packets']}</td><td>{flow['bytes']}</td><td>{escape(str(flow.get('duration') if flow.get('duration') is not None else '—'))}</td><td>{escape(str(flow.get('handshake_ms') if flow.get('handshake_ms') is not None else '—'))}</td><td>{escape(str(flow.get('reply_gap_ms') if flow.get('reply_gap_ms') is not None else '—'))}</td></tr>"
         )
     if not flow_rows:
         flow_rows.append("<tr><td colspan='5'>No conversations found.</td></tr>")
