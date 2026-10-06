@@ -95,7 +95,13 @@ Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') i
 <p>The same counts are used for the demo and a live run. A lookup is timed only if both the question and the answer were captured.</p></div>
 <h2>Why it may be slow</h2><div class="panel"><p>{escape(summary.get('why_slow') or 'No reading yet.')}</p></div>
 <h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>
-<h2>Traffic mix</h2><div class="panel">{_bars(sorted(summary['categories'].items(), key=lambda item: -item[1]))}</div>
+<h2>What this page is doing</h2>
+<div class="panel">
+<p>The program groups packets into talks. A talk is both directions between two addresses and ports.</p>
+<p>Traffic mix is the count of those packets by best guess. A best guess comes from the port, such as 443 for encrypted web, or from a visible site name such as bbc.co.uk. It is not the page, the video, or the search.</p>
+<p>Download and upload bytes are payload sizes in this capture, not a broadband speed test. The reading score drops if packets were repeated, a talk was reset, or a name lookup failed.</p>
+</div>
+<h2>Traffic mix</h2><div class="panel"><p>Each bar is a share of the packets in this capture. A longer bar means more packets of that kind, not a faster connection.</p>{_bars(sorted(summary['categories'].items(), key=lambda item: -item[1]))}</div>
 <p>Source: {escape(summary['source'])}. Owner: Oluwatobiloba Benjamin Ogungbangbe. All rights reserved.</p>
 <h2>Busiest addresses</h2><div class="panel"><ul>{talker_rows}</ul></div>
 <h2>Conversations</h2>

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.10.0
+
+- The report explains what it is doing, and what the traffic mix bars mean.
+- The same explanation is used for the demo and a live run.
+
 ## 2.9.0
 
 - `--reach bbc.co.uk` says if that name was visible. Demo and live use the same check.

@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. To ask about one site:
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. Traffic mix is the share of packets by best guess. Encrypted web means port 443. BBC or YouTube appears only if that name was visible. A longer bar is more packets, not a faster line. The page now explains this above the bars.
 
 ```bat
 python DPI.py demo --reach bbc.co.uk
