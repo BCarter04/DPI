@@ -87,7 +87,12 @@ Apps               {escape(', '.join(summary.get('apps') or []) or 'none named')
 Devices            {len(summary.get('devices') or [])}
 Why it may be slow {escape(summary.get('why_slow') or '')}</pre></div>
 <h2>Apps seen</h2><div class="panel"><ul>{''.join(f"<li>{escape(item['name'])}: confidence {escape(item['confidence'])}. Evidence: {escape(', '.join(item['evidence']) or 'name match')}</li>" for item in summary.get('apps_seen') or []) or '<li>No listed app name was visible.</li>'}</ul><p>This is a name match, not the page or the video. Demo and live use the same list.</p></div>
-<h2>Name lookups</h2><div class="panel"><p>{escape(', '.join(f"{item['name']} {item['ms']} ms" for item in summary.get('dns_times') or []) or 'No timed lookup in this capture. The same check runs on the demo and on a live network.')}</p></div>
+<h2>DNS health</h2>
+<div class="panel"><pre>Status        {escape((summary.get('dns_summary') or {}).get('health') or 'Not seen')}
+Answered      {(summary.get('dns_summary') or {}).get('answered', 0)}
+Failed        {(summary.get('dns_summary') or {}).get('failed', 0)}
+Average       {escape(str((summary.get('dns_summary') or {}).get('average_ms') if (summary.get('dns_summary') or {}).get('average_ms') is not None else 'not timed'))} ms</pre>
+<p>The same counts are used for the demo and a live run. A lookup is timed only if both the question and the answer were captured.</p></div>
 <h2>Why it may be slow</h2><div class="panel"><p>{escape(summary.get('why_slow') or 'No reading yet.')}</p></div>
 <h2>Devices active</h2><div class="panel"><p>{escape(str(len(summary.get('devices') or [])))} local device(s). {escape(', '.join(item['address'] for item in summary.get('devices') or []) or 'None seen.')}</p><p>This is who talked during the check, or who answered on the local network. A silent device is not listed. This is not a scan of the public internet.</p></div>
 <h2>Traffic mix</h2><div class="panel">{_bars(sorted(summary['categories'].items(), key=lambda item: -item[1]))}</div>

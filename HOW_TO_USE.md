@@ -7,7 +7,7 @@ python DPI.py demo
 python DPI.py live --count 80
 ```
 
-Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. If the window says "Could not read one packet: it was cut off", a live packet was shorter than a full name lookup or handshake. DPI stopped rather than guess. It is not a decrypt error, and it does not mean Npcap is missing. Run the demo to confirm the program works. For live, close the window, open it with Run as administrator, and try again.
+Open `dpi-output\report.html` after the demo, and `live-output\report.html` after the live check. Both should show packets, name lookups, apps, devices, warnings, why it may be slow, and a talk-health line for each conversation. A repeat means the same packet number was seen twice. A reset means the talk was cut off. The report has a DNS health block. Answered means a name question and its reply were both seen. Failed means the reply said the name was missing or refused. Average is the time between those two packets, not a speed test.
 
 ## Check this computer, then install
 

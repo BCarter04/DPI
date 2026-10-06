@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.7.0
+
+- DNS health now shows answered, failed, and average time on the demo and live report.
+- A live capture with no packets explains Npcap, Administrator, and the network card in plain words.
+
 ## 2.6.0
 
 - A short live packet no longer needs to stop the reading with "list index out of range".

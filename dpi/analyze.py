@@ -339,6 +339,8 @@ def analyze(packets, source):
             if seen:
                 item["evidence"].add(seen)
     apps_seen = [{"name": item["name"], "confidence": item["confidence"], "evidence": sorted(item["evidence"])} for item in apps_seen.values()]
+    average_ms = round(sum(ms for _, ms in dns_times) / len(dns_times), 1) if dns_times else None
+    dns_summary = {"answered": len(dns_times), "failed": len(dns_problems), "average_ms": average_ms, "health": dns_health}
     return {
         "source": source,
         "generated_at": datetime.now().isoformat(timespec="seconds"),
@@ -353,6 +355,7 @@ def analyze(packets, source):
         "alerts": alerts,
         "dns_times": [{"name": name, "ms": ms} for name, ms in dns_times[:8]],
         "dns_health": dns_health,
+        "dns_summary": dns_summary,
         "gateway": gateway,
         "score": score,
         "download_bytes": download_bytes,

@@ -131,7 +131,13 @@ def main(argv=None):
         packets = keep_device(capture_live(iface, args.count), args.device)
         source = f"live capture on {iface}, the network this computer is using"
         if not packets:
-            raise SystemExit(f"No packets were read on {iface}. Run this window as Administrator, install Npcap, and pick the Wi-Fi or Ethernet name.")
+            raise SystemExit(
+                "Could not read packets on this network card.\n"
+                "1. Install Npcap from https://npcap.com\n"
+                "2. Open the window or command as Administrator.\n"
+                "3. Pick Wi-Fi or Ethernet, not a loopback card.\n"
+                "The demo does not need any of those."
+            )
         summary = analyze(packets, source)
         linked = devices_on_link(iface)
         if linked:

@@ -1,4 +1,15 @@
-# DPI 2.6.0
+# DPI 2.7.0
+
+Network traffic explained in plain English. It does not decrypt pages, videos, or searches.
+
+- Live capture and a fake demo use the same report
+- DNS health: answered, failed, and average time
+- App names with the site that matched
+- Device count and a phones, printers, and TVs label
+- Talk health, reading score, download and upload bytes
+- Watch mode that refreshes the report
+
+## Try it
 
 Network traffic explained in plain English. It does not decrypt pages, videos, or searches.
 
