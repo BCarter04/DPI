@@ -31,3 +31,5 @@ def test_name_is_escaped():
     write_html(path, summary)
     text = open(path, encoding="utf-8").read()
     assert "<script>" in text
+    assert "<script>" not in text
+
