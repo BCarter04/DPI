@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.15.0
+
+- An empty capture now writes a full report instead of stopping.
+- Demo and live use the same empty-capture note.
+
 ## 2.14.0
 
 - A warning names the address that moved at least half of the payload.
