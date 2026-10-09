@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.39.0
+
+- The window shows the same packet count and packets per second as the report.
+- Demo and live use the same lines. This is not a speed test.
+
 ## 2.38.0
 
 - The window shows the same reading as the report, one line at a time.
