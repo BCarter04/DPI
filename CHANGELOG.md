@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.40.0
+
+- The window shows the same download and upload byte counts as the report.
+- Demo and live use the same lines. These are payload sizes in the capture, not a broadband speed test.
+
 ## 2.39.0
 
 - The window shows the same packet count and packets per second as the report.
