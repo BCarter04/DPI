@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.38.0
+
+- The window shows the same reading as the report, one line at a time.
+- Demo and live use the same lines. Nothing is decrypted.
+
 ## 2.37.0
 
 - The window shows the same possible-QUIC count as the report.

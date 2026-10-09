@@ -73,12 +73,8 @@ def launch():
                         summary["devices"] = [{"address": address, "how": "answered on the local network", "role": role_for(address)} for address in linked]
                         summary["highlights"].insert(0, f"{len(linked)} device(s) answered on the local network: {', '.join(linked)}.")
                 path = write_outputs(summary, folder)
-                roles = ", ".join(f"{item['address']} ({item.get('role') or 'seen'})" for item in summary.get("devices") or []) or "no local address"
-                from dpi.report import top_guess
-                warning = (summary.get("alerts") or ["No warning in this capture."])[0]
-                apps = ", ".join(summary.get("apps") or []) or "none named"
-                home = ", ".join(name for name in ("Address setup (DHCP)", "Phones, printers, and TVs") if (summary.get("categories") or {}).get(name)) or "not seen"
-                set_status(f"Wrote {path}. Score: {summary.get('score')}/100. Gateway guess: {summary.get('gateway')}. Local network: {summary.get('subnet')}. DNS: {summary.get('dns_health')}. Possible QUIC: {summary.get('metrics', {}).get('quic_packets', 0)}. Apps: {apps}. Devices: {len(summary.get('devices') or [])}. Home setup: {home}. Top guess: {top_guess(summary)}. Warning: {warning}. Why it may be slow: {summary.get('why_slow')}. {roles}")
+                from dpi.report import window_lines
+                set_status(window_lines(summary, path))
                 open_report(path)
             except Exception as error:
                 set_status("The check failed.")

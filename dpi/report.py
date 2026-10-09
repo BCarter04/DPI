@@ -15,7 +15,27 @@ What it will do
 from html import escape
 
 
-def top_guess(summary):
+def window_lines(summary, path):
+    """The same reading as the report, one line each, for the window."""
+    apps = ", ".join(summary.get("apps") or []) or "none named"
+    home = ", ".join(name for name in ("Address setup (DHCP)", "Phones, printers, and TVs") if (summary.get("categories") or {}).get(name)) or "not seen"
+    roles = ", ".join(f"{item['address']} ({item.get('role') or 'seen'})" for item in summary.get("devices") or []) or "no local address"
+    warning = (summary.get("alerts") or ["No warning in this capture."])[0]
+    return "\n".join([
+        f"Wrote {path}",
+        f"Score: {summary.get('score')}/100",
+        f"Gateway guess: {summary.get('gateway')}",
+        f"Local network: {summary.get('subnet')}",
+        f"DNS: {summary.get('dns_health')}",
+        f"Possible QUIC: {summary.get('metrics', {}).get('quic_packets', 0)}",
+        f"Apps: {apps}",
+        f"Devices: {len(summary.get('devices') or [])}",
+        f"Home setup: {home}",
+        f"Top guess: {top_guess(summary)}",
+        f"Warning: {warning}",
+        f"Why it may be slow: {summary.get('why_slow')}",
+        roles,
+    ])
     """The busiest guess and its share of packets. Not a speed test."""
     pairs = sorted((summary.get("categories") or {}).items(), key=lambda item: -item[1])
     if not pairs:
