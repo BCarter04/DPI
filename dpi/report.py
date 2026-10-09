@@ -36,6 +36,9 @@ def window_lines(summary, path):
         f"Why it may be slow: {summary.get('why_slow')}",
         roles,
     ])
+
+
+def top_guess(summary):
     """The busiest guess and its share of packets. Not a speed test."""
     pairs = sorted((summary.get("categories") or {}).items(), key=lambda item: -item[1])
     if not pairs:
