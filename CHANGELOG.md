@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.43.0
+
+- The window says whether the reading came from the demo or from a live capture.
+- Demo and live use the same line. Nothing is decrypted.
+
 ## 2.42.0
 
 - The window shows the same active-talk and timed name-lookup counts as the report.

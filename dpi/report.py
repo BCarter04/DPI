@@ -23,6 +23,7 @@ def window_lines(summary, path):
     warning = (summary.get("alerts") or ["No warning in this capture."])[0]
     return "\n".join([
         f"Wrote {path}",
+        f"Source: {summary.get('source')}",
         f"Packets: {summary.get('metrics', {}).get('packet_count', 0)}",
         f"Packets/sec: {summary.get('metrics', {}).get('packets_per_second', 0)}",
         f"Active talks: {len(summary.get('flows') or [])}",
