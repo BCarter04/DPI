@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.42.0
+
+- The window shows the same active-talk and timed name-lookup counts as the report.
+- Demo and live use the same lines. A lookup is counted only if the question and answer were both seen.
+
 ## 2.41.0
 
 - The window shows the same repeated-packet and reset counts as the report.

@@ -25,6 +25,8 @@ def window_lines(summary, path):
         f"Wrote {path}",
         f"Packets: {summary.get('metrics', {}).get('packet_count', 0)}",
         f"Packets/sec: {summary.get('metrics', {}).get('packets_per_second', 0)}",
+        f"Active talks: {len(summary.get('flows') or [])}",
+        f"Name lookups: {len(summary.get('dns_times') or [])}",
         f"Download bytes: {summary.get('download_bytes', 0)}",
         f"Upload bytes: {summary.get('upload_bytes', 0)}",
         f"Repeated packets: {summary.get('metrics', {}).get('repeated_sequences', 0)}",
