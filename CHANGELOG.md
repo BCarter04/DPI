@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.41.0
+
+- The window shows the same repeated-packet and reset counts as the report.
+- A repeat is the same packet number seen twice. A reset means the talk was cut off. Demo and live use the same lines.
+
 ## 2.40.0
 
 - The window shows the same download and upload byte counts as the report.

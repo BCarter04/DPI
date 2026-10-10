@@ -27,6 +27,8 @@ def window_lines(summary, path):
         f"Packets/sec: {summary.get('metrics', {}).get('packets_per_second', 0)}",
         f"Download bytes: {summary.get('download_bytes', 0)}",
         f"Upload bytes: {summary.get('upload_bytes', 0)}",
+        f"Repeated packets: {summary.get('metrics', {}).get('repeated_sequences', 0)}",
+        f"Resets: {summary.get('metrics', {}).get('resets', 0)}",
         f"Score: {summary.get('score')}/100",
         f"Gateway guess: {summary.get('gateway')}",
         f"Local network: {summary.get('subnet')}",
